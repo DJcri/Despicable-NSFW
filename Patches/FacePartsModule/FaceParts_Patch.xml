@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<Patch>
+
+	<Operation Class="PatchOperationSequence">
+		<success>Always</success>
+		<operations>
+		
+			<li Class="PatchOperationAdd">
+				<success>Always</success>
+				<xpath>Defs/ThingDef[race][not(comps)]</xpath>
+				<value>
+					<comps/>
+				</value>
+			</li>
+			
+			<li Class="PatchOperationAdd">
+				<success>Always</success>
+				<xpath>Defs/AlienRace.ThingDef_AlienRace[not(comps)]</xpath>
+				<value>
+					<comps/>
+				</value>
+			</li>
+			
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/ThingDef[@Name="BasePawn"]/comps</xpath>
+				<value>
+					<li Class="Despicable.CompProperties_FaceParts"/>
+				</value>
+			</li>
+			
+			<li Class="PatchOperationAdd">
+				<xpath>Defs/AlienRace.ThingDef_AlienRace/comps</xpath>
+				<value>
+					<li Class="Despicable.CompProperties_FaceParts"/>
+				</value>
+			</li>
+			
+		</operations>
+	</Operation>
+	
+</Patch>

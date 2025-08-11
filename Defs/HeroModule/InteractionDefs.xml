@@ -1,0 +1,203 @@
+<Defs>
+	<InteractionDef>
+		<defName>PetAnimal</defName>
+		<label>pet animal</label>
+		<workerClass>InteractionWorker</workerClass>
+		<ignoreTimeSinceLastInteraction>True</ignoreTimeSinceLastInteraction>
+		<symbol>UI/Abilities/PetAnimal</symbol>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] petted [RECIPIENT_nameDef] [adverb], and is now their bestest friend.</li>
+				<li>r_logentry->[INITIATOR_nameDef] gave [RECIPIENT_nameDef] a toy, now it won't stop following them.</li>
+				<li>adverb->adoringly</li>
+				<li>adverb->lovingly</li>
+				<li>adverb->softly</li>
+				<li>adverb->gently</li>
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+	<InteractionDef>
+		<defName>OperantTraining</defName>
+		<label>operant training</label>
+		<workerClass>InteractionWorker</workerClass>
+		<ignoreTimeSinceLastInteraction>True</ignoreTimeSinceLastInteraction>
+		<symbol>UI/Abilities/OperantTraining</symbol>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] [adverb] beat [RECIPIENT_nameDef], for failing to perform a trick. It will perform better next time.</li>
+				<li>adverb->brutally</li>
+				<li>adverb->visciously</li>
+				<li>adverb->angrily</li>
+				<li>adverb->violently</li>
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+	<InteractionDef>
+		<defName>Uplift</defName>
+		<label>uplift</label>
+		<workerClass>InteractionWorker</workerClass>
+		<ignoreTimeSinceLastInteraction>True</ignoreTimeSinceLastInteraction>
+		<symbol>UI/Abilities/Uplift</symbol>
+		<recipientThought>UpliftReceiver</recipientThought>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] complimented [RECIPIENT_possessive] [thing], [RECIPIENT_possessive] mood is lifted.</li>
+				<li>thing->appearance</li>
+				<li>thing->personality</li>
+				<li>thing->achievements</li>
+				<li>thing->hard work</li>
+				<li>thing->fashion</li>
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+	<InteractionDef>
+		<defName>PepTalk</defName>
+		<label>pep-talk</label>
+		<workerClass>InteractionWorker</workerClass>
+		<ignoreTimeSinceLastInteraction>True</ignoreTimeSinceLastInteraction>
+		<symbol>UI/Abilities/PepTalk</symbol>
+		<recipientThought>PepTalkReceiver</recipientThought>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] gave [RECIPIENT_nameDef] a pep-talk, [RECIPIENT_nameDef] is [adjective] to work.</li>
+				<li>adjective->happy</li>
+				<li>adjective->motivated</li>
+				<li>adjective->encouraged</li>
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+	<InteractionDef>
+		<defName>Proselytize</defName>
+		<label>proselytize</label>
+		<workerClass>InteractionWorker</workerClass>
+		<ignoreTimeSinceLastInteraction>True</ignoreTimeSinceLastInteraction>
+		<symbol>UI/Abilities/Proselytize</symbol>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] preached their ideology to [RECIPIENT_nameDef], [RECIPIENT_nameDef] has gained respect for their ideology.</li>
+				<li>r_logentry->[INITIATOR_nameDef] explained their ideology to [RECIPIENT_nameDef], [RECIPIENT_nameDef] is thoughtful about it.</li>
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+	<InteractionDef>
+		<defName>Oversee</defName>
+		<label>oversee</label>
+		<workerClass>InteractionWorker</workerClass>
+		<ignoreTimeSinceLastInteraction>True</ignoreTimeSinceLastInteraction>
+		<symbol>UI/Abilities/Oversee</symbol>
+		<recipientThought>OverseeReceiver</recipientThought>
+		<logRulesInitiator>
+			<rulesStrings>
+				<li>r_logentry->[INITIATOR_nameDef] threatened [RECIPIENT_nameDef] with [threat], [RECIPIENT_nameDef] feels compelled to work harder.</li>
+				<li>threat->violence</li>
+				<li>threat->nutrient paste</li>
+				<li>threat->unimaginable horrors</li>
+				<li>threat->a rough beating</li>
+				<li>threat->death by firing squad</li>
+				<li>threat->organ harvesting</li>
+				<!-- Insert dark humor here -->
+			</rulesStrings>
+		</logRulesInitiator>
+	</InteractionDef>
+	<!-- Social thoughts -->
+	<ThoughtDef>
+		<defName>UpliftReceiver</defName>
+		<thoughtClass>Thought_MemorySocial</thoughtClass>
+		<durationDays>2</durationDays>
+		<stackLimit>1</stackLimit>
+		<stackedEffectMultiplier>0.3</stackedEffectMultiplier>
+		<!-- MemorySocial values -->
+		<stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+		<!-- End of MemorySocial values -->
+		<stages>
+			<li>
+				<label>mood uplift</label>
+				<baseOpinionOffset>7</baseOpinionOffset>
+			</li>
+		</stages>
+		<thoughtToMake>UpliftedMood</thoughtToMake>
+	</ThoughtDef>
+	<ThoughtDef>
+		<defName>PepTalkReceiver</defName>
+		<thoughtClass>Thought_MemorySocial</thoughtClass>
+		<durationDays>1</durationDays>
+		<stackLimit>1</stackLimit>
+		<stackedEffectMultiplier>0.3</stackedEffectMultiplier>
+		<!-- MemorySocial values -->
+		<stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+		<!-- End of MemorySocial values -->
+		<stages>
+			<li>
+				<label>pep-talk</label>
+				<baseOpinionOffset>5</baseOpinionOffset>
+			</li>
+		</stages>
+		<thoughtToMake>PeppedMood</thoughtToMake>
+	</ThoughtDef>
+	<ThoughtDef>
+		<defName>OverseeReceiver</defName>
+		<thoughtClass>Thought_MemorySocial</thoughtClass>
+		<durationDays>1</durationDays>
+		<stackLimit>1</stackLimit>
+		<stackedEffectMultiplier>0.9</stackedEffectMultiplier>
+		<!-- MemorySocial values -->
+		<stackLimitForSameOtherPawn>1</stackLimitForSameOtherPawn>
+		<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+		<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+		<!-- End of MemorySocial values -->
+		<stages>
+			<li>
+				<label>overseen</label>
+				<baseOpinionOffset>-10</baseOpinionOffset>
+			</li>
+		</stages>
+		<thoughtToMake>OverseenMood</thoughtToMake>
+	</ThoughtDef>
+	<!-- Mood thoughts -->
+	<ThoughtDef>
+		<defName>UpliftedMood</defName>
+		<thoughtClass>Thought_Memory</thoughtClass>
+		<durationDays>2</durationDays>
+		<stackLimit>1</stackLimit>
+		<stackedEffectMultiplier>0.3</stackedEffectMultiplier>
+		<stages>
+			<li>
+				<label>was complimented by {0}</label>
+				<description>{0} gave me a compliment, it was nice.</description>
+				<baseMoodEffect>15</baseMoodEffect>
+			</li>
+		</stages>
+	</ThoughtDef>
+	<ThoughtDef>
+		<defName>PeppedMood</defName>
+		<thoughtClass>Thought_Memory</thoughtClass>
+		<durationDays>1</durationDays>
+		<stackLimit>1</stackLimit>
+		<stackedEffectMultiplier>0.3</stackedEffectMultiplier>
+		<stages>
+			<li>
+				<label>was given a pep-talk by {0}</label>
+				<description>{0} gave me a pep-talk, I feel motivated.</description>
+				<baseMoodEffect>5</baseMoodEffect>
+			</li>
+		</stages>
+	</ThoughtDef>
+	<ThoughtDef>
+		<defName>OverseenMood</defName>
+		<thoughtClass>Thought_Memory</thoughtClass>
+		<durationDays>1</durationDays>
+		<stackLimit>1</stackLimit>
+		<stackedEffectMultiplier>0.9</stackedEffectMultiplier>
+		<stages>
+			<li>
+				<label>was overseen by {0}</label>
+				<description>{0} threatened me to work harder, I hate being here.</description>
+				<baseMoodEffect>-5</baseMoodEffect>
+			</li>
+		</stages>
+	</ThoughtDef>
+</Defs>

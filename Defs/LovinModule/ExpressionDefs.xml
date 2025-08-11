@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Lovin</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_halflid</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_smirk</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_LipBite</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_squint</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_lipbite</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Gasp</defName>
+		<browsOffset>(0, 0, 0.025)</browsOffset>
+		<texPathMouth>FaceParts/Mouths/mouth_gasp</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Moan</defName>
+		<browsOffset>(0, 0, 0.025)</browsOffset>
+		<texPathEyes>FaceParts/Eyes/eyes_closed</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_yawn</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Orgasm</defName>
+		<browsOffset>(0, 0, -0.025)</browsOffset>
+		<texPathEyes>FaceParts/Eyes/eyes_shuttight</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_gasp</texPathMouth>
+		<!-- Face details are only rendered when used in facial animation, might deprecate -->
+		<texPathDetail>FaceParts/Details/detail_cheekblush</texPathDetail>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Drool</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_halflid</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_drool</texPathMouth>
+	</Despicable.ExpressionDef>
+</Defs>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<packageId>DCSzar.Despicable</packageId>
+	<name>Despicable</name>
+	<author>DCSzar</author>
+	<description>
+	A lightweight, barebones, alternative to RJW and NAL's facial animations. Built for maximum compatibility. This mod adds explicit lovin' to RimWorld, including explicit nudity and animations. FOR ADULTS ONLY! The animation system is heavily reworked and updated version of c0ffeeee's rimworld animation framework. I asked for their permission to use his assets and he generously said yes!
+	</description>
+	<supportedVersions>
+		<li>1.6</li>
+	</supportedVersions>
+	<loadAfter>
+		<li>brrainz.harmony</li>
+		<li>LovelyDovey.Sex.WithEuterpe</li>
+	</loadAfter>
+</ModMetaData>

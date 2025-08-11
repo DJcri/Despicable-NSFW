@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Drunk</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_drunk</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_drunk</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Tired</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_tired</texPathEyes>
+		<browsOffset>(0, 0, -0.025)</browsOffset>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_EyesClosed</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_closed</texPathEyes>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Smile</defName>
+		<texPathMouth>FaceParts/Mouths/mouth_grin</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Smirk</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_halflid</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_smirk</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Grimace</defName>
+		<browsOffset>(0, 0, -0.025)</browsOffset>
+		<texPathEyes>FaceParts/Eyes/eyes_squint</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_grin</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Berserk</defName>
+		<browsOffset>(0, 0, -0.025)</browsOffset>
+		<texPathEyes>FaceParts/Eyes/eyes_manic</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_frown</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Manic</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_manic</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_grin</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_High</defName>
+		<texPathEyes>FaceParts/Eyes/eyes_tired</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_grin</texPathMouth>
+	</Despicable.ExpressionDef>
+	<Despicable.ExpressionDef>
+		<defName>FacialExpression_Surprised</defName>
+		<browsOffset>(0, 0, 0.025)</browsOffset>
+		<texPathEyes>FaceParts/Eyes/eyes_manic</texPathEyes>
+		<texPathMouth>FaceParts/Mouths/mouth_gasp</texPathMouth>
+	</Despicable.ExpressionDef>
+</Defs>
