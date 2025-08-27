@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_Uplift</defName>
+		<texPath>UI/Abilities/Uplift</texPath>
+		<karmaRequirement>1</karmaRequirement>
+		<description>Desc_Uplift</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_PepTalk</defName>
+		<texPath>UI/Abilities/PepTalk</texPath>
+		<karmaRequirement>0.75</karmaRequirement>
+		<description>Desc_PepTalk</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_PetAnimal</defName>
+		<texPath>UI/Abilities/PetAnimal</texPath>
+		<karmaRequirement>0.5</karmaRequirement>
+		<description>Desc_PetAnimal</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_Proselytize</defName>
+		<texPath>UI/Abilities/Proselytize</texPath>
+		<karmaRequirement>0.25</karmaRequirement>
+		<description>Desc_Proselytize</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_Torture</defName>
+		<texPath>UI/Abilities/Torture</texPath>
+		<karmaRequirement>-0.25</karmaRequirement>
+		<description>Desc_Torture</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_OperantTraining</defName>
+		<texPath>UI/Abilities/OperantTraining</texPath>
+		<karmaRequirement>-0.5</karmaRequirement>
+		<description>Desc_OperantTraining</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_Oversee</defName>
+		<texPath>UI/Abilities/Oversee</texPath>
+		<karmaRequirement>-0.75</karmaRequirement>
+		<description>Desc_Oversee</description>
+	</Despicable.KarmaicAbilityDef>
+	<Despicable.KarmaicAbilityDef>
+		<defName>KarmaicAbility_FearMonger</defName>
+		<texPath>UI/Abilities/FearMonger</texPath>
+		<karmaRequirement>-1</karmaRequirement>
+		<description>Desc_FearMonger</description>
+	</Despicable.KarmaicAbilityDef>
+	<!-- defNames must match defName of corresponding karmaic ability def -->
+	<AbilityDef ParentName="AbilityTouchBase">
+		<defName>PetAnimal</defName>
+		<label>pet animal</label>
+		<description>Pet a tamed, not bonded animal to create a bond with it.</description>
+		<iconPath>UI/Abilities/PetAnimal</iconPath>
+		<showWhenDrafted>false</showWhenDrafted>
+		<hostile>false</hostile>
+		<casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+		<cooldownTicksRange>400</cooldownTicksRange>
+		<displayOrder>0</displayOrder>
+		<verbProperties>
+			<verbClass>Verb_CastAbilityTouch</verbClass>
+			<drawAimPie>false</drawAimPie>
+			<range>-1</range>
+			<warmupTime>2</warmupTime>
+			<targetParams>
+				<canTargetAnimals>true</canTargetAnimals>
+				<canTargetHumans>false</canTargetHumans>
+				<canTargetSelf>false</canTargetSelf>
+				<canTargetBuildings>false</canTargetBuildings>
+				<canTargetMechs>false</canTargetMechs>
+				<canTargetBloodfeeders>false</canTargetBloodfeeders>
+			</targetParams>
+		</verbProperties>
+		<comps>
+			<li Class="Despicable.CompProperties_AbilityKarmaic">
+				<karmaicAbilityDef>KarmaicAbility_PetAnimal</karmaicAbilityDef>
+			</li>
+		</comps>
+	</AbilityDef>
+	<AbilityDef ParentName="AbilityTouchBase">
+		<defName>OperantTraining</defName>
+		<label>operant training</label>
+		<description>Train a tamed animal's next training priority aggressively, but instantly.</description>
+		<iconPath>UI/Abilities/OperantTraining</iconPath>
+		<showWhenDrafted>false</showWhenDrafted>
+		<hostile>false</hostile>
+		<casterMustBeCapableOfViolence>false</casterMustBeCapableOfViolence>
+		<cooldownTicksRange>420000</cooldownTicksRange>
+		<displayOrder>0</displayOrder>
+		<verbProperties>
+			<verbClass>Verb_CastAbilityTouch</verbClass>
+			<drawAimPie>false</drawAimPie>
+			<range>-1</range>
+			<warmupTime>2</warmupTime>
+			<targetParams>
+				<canTargetAnimals>true</canTargetAnimals>
+				<canTargetHumans>false</canTargetHumans>
+				<canTargetSelf>false</canTargetSelf>
+				<canTargetBuildings>false</canTargetBuildings>
+				<canTargetMechs>false</canTargetMechs>
+				<canTargetBloodfeeders>false</canTargetBloodfeeders>
+			</targetParams>
+		</verbProperties>
+		<comps>
+			<li Class="Despicable.CompProperties_AbilityKarmaic">
+				<karmaicAbilityDef>KarmaicAbility_OperantTraining</karmaicAbilityDef>
+			</li>
+		</comps>
+	</AbilityDef>
+</Defs>

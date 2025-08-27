@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{96DCD036-DD10-459E-9D2B-E6BEDE3925A0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Despicable</RootNamespace>
+    <AssemblyName>Despicable</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\1.6\Assemblies\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.6\Assemblies\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony, Version=2.3.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnimModule\AnimBuilder\Actor.cs" />
+    <Compile Include="AnimModule\AnimBuilder\Dialog_AnimBuilder.cs" />
+    <Compile Include="AnimModule\AnimUtil.cs" />
+    <Compile Include="FacePartsModule\FaceParts\FacePartStyleDef.cs" />
+    <Compile Include="FacePartsModule\Patches\HarmonyPatch_AddFaceGizmo.cs" />
+    <Compile Include="FacePartsModule\UI\Dialog_FaceCustomizer.cs" />
+    <Compile Include="FacePartsModule\UI\FaceGizmo.cs" />
+    <Compile Include="LovinModule\DefOf\LovinModule_PawnRenderNodeTagDefOf.cs" />
+    <Compile Include="LovinModule\Patches\HarmonyPatch_PawnRenderNodeWorkerBody.cs" />
+    <Compile Include="MiscCommon\StatPart_ThoughtOffset.cs" />
+    <Compile Include="HeroModule\DefOf\HeroModule_ThoughtDefOf.cs" />
+    <Compile Include="LovinModule\DefOf\LovinModule_FacialAnimDefOf.cs" />
+    <Compile Include="LovinModule\DefOf\LovinModule_InteractionDefOf.cs" />
+    <Compile Include="LovinModule\DefOf\LovinModule_SoundDefOf.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\AnimGroupDef.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\AnimRoleDef.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\AnimationPropDef.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\BodyType\PawnRenderNodeProperties_GraphicBodyTypeVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\BodyType\PawnRenderNode_GraphicBodyTypeVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\HediffSeverity\PawnRenderNodeProperties_GraphicHediffSeverityVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\HediffSeverity\PawnRenderNode_GraphicHediffSeverityVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\Hediff\PawnRenderNodeProperties_GraphicHediffVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\Hediff\PawnRenderNode_GraphicHediffVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\PawnRenderNodeProperties_GraphicVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\PawnRenderNodeWorker_GraphicVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\GraphicVariants\PawnRenderNode_GraphicVariants.cs" />
+    <Compile Include="AnimModule\AnimParts\PropRenderNodes\TexPathVariantsDef.cs" />
+    <Compile Include="AnimModule\ContextUtil.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\AnimationOffsetDef.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\AnimationOffset_AgeRange.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\AnimationOffset_BodyType.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\AnimationOffset_BodyTypeGendered.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\AnimationOffset_Single.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\BaseAnimationOffset.cs" />
+    <Compile Include="AnimModule\AnimParts\AnimGroups\Offsets\BodyTypeOffset.cs" />
+    <Compile Include="AnimModule\Comp\CompProperties_ExtendedAnimator.cs" />
+    <Compile Include="AnimModule\Comp\CompExtendedAnimator.cs" />
+    <Compile Include="AnimModule\AnimParts\ExtendedKeyframe\AnimationWorker_ExtendedKeyframes.cs" />
+    <Compile Include="AnimModule\AnimParts\ExtendedKeyframe\ExtendedKeyframe.cs" />
+    <Compile Include="AnimModule\Patches\HarmonyPatch_DrawTracker.cs" />
+    <Compile Include="AnimModule\Patches\HarmonyPatch_PawnRenderer.cs" />
+    <Compile Include="AnimModule\Patches\HarmonyPatch_PawnRenderNode.cs" />
+    <Compile Include="AnimModule\Patches\HarmonyPatch_PawnRenderTree.cs" />
+    <Compile Include="AnimModule\AnimParts\RenderSubworkers\PawnRenderSubWorker_ChangeOffset.cs" />
+    <Compile Include="AnimModule\AnimParts\RenderSubworkers\PawnRenderSubWorker_HideWhenAnimating.cs" />
+    <Compile Include="MiscCommon\CommonUtil.cs" />
+    <Compile Include="MiscCommon\HexColors.cs" />
+    <Compile Include="MiscCommon\UIUtil.cs" />
+    <Compile Include="FacePartsModule\Comp\CompFaceParts.cs" />
+    <Compile Include="FacePartsModule\Comp\CompProperties_FaceParts.cs" />
+    <Compile Include="FacePartsModule\DefOf\FacePartsModule_ExpressionDefOf.cs" />
+    <Compile Include="FacePartsModule\DefOf\FacePartsModule_FacialAnimDefOf.cs" />
+    <Compile Include="FacePartsModule\FacePartsUtil.cs" />
+    <Compile Include="FacePartsModule\FaceParts\ExpressionDef.cs" />
+    <Compile Include="FacePartsModule\FaceParts\FacePartDef.cs" />
+    <Compile Include="FacePartsModule\FaceParts\FacialAnimDef.cs" />
+    <Compile Include="FacePartsModule\FaceParts\FacialAnimKeyframeDef.cs" />
+    <Compile Include="FacePartsModule\RenderNodes\PawnRenderNodeWorker_FacePart.cs" />
+    <Compile Include="MiscCommon\PawnStateUtil.cs" />
+    <Compile Include="HeroModule\Comp\CompProperties_Hero.cs" />
+    <Compile Include="HeroModule\DefOf\HeroModule_KarmaicAbilityDefOf.cs" />
+    <Compile Include="HeroModule\DefOf\HeroModule_InteractionDefOf.cs" />
+    <Compile Include="HeroModule\Karma\KarmaicAbilities\KarmaicAbilityDef.cs" />
+    <Compile Include="HeroModule\Karma\StatPart_KarmaOffset.cs" />
+    <Compile Include="HeroModule\UI\Dialog_HeroScreen.cs" />
+    <Compile Include="HeroModule\Comp\CompHero.cs" />
+    <Compile Include="HeroModule\UI\HeroGizmo.cs" />
+    <Compile Include="HeroModule\HeroUtil.cs" />
+    <Compile Include="HeroModule\KarmaUtil.cs" />
+    <Compile Include="HeroModule\Patches\HarmonyPatch_AddHeroGizmo.cs" />
+    <Compile Include="HeroModule\Patches\HarmonyPatch_Deeds.cs" />
+    <Compile Include="LovinModule\Comp\CompLovinParts.cs" />
+    <Compile Include="LovinModule\Comp\CompProperties_LovinParts.cs" />
+    <Compile Include="LovinModule\DefOf\LovinModule_GenitalDefOf.cs" />
+    <Compile Include="LovinModule\DefOf\LovinModule_JobDefOf.cs" />
+    <Compile Include="LovinModule\Genitals\GenitalDef.cs" />
+    <Compile Include="HeroModule\Karma\KarmaicAbilities\CompProperties_AbilityKarmaic.cs" />
+    <Compile Include="LovinModule\Interaction\InteractionMenu.cs" />
+    <Compile Include="LovinModule\Interaction\Interactions.cs" />
+    <Compile Include="HeroModule\Karma\KarmaicAbilities\CompAbilityEffect_Karmaic.cs" />
+    <Compile Include="LovinModule\Interaction\LovinInteractions.cs" />
+    <Compile Include="LovinModule\Interaction\LovinTypeDef.cs" />
+    <Compile Include="LovinModule\LovinJob\Drivers\JobDriver_LovinBase.cs" />
+    <Compile Include="LovinModule\LovinJob\Givers\JobGiver_GetBedLovin.cs" />
+    <Compile Include="LovinModule\LovinJob\Givers\JobGiver_GetLovin.cs" />
+    <Compile Include="LovinModule\LovinJob\Drivers\JobDriver_LovinBed.cs" />
+    <Compile Include="LovinModule\LovinJob\Drivers\JobDriver_ReturnLovin.cs" />
+    <Compile Include="LovinModule\LovinJob\Drivers\JobDriver_LovinNoBed.cs" />
+    <Compile Include="LovinModule\LovinJob\ModExtension_LovinType.cs" />
+    <Compile Include="LovinModule\LovinUtil.cs" />
+    <Compile Include="LovinModule\Patches\HarmonyPatch_FloatMenuMakerMap.cs" />
+    <Compile Include="Despicable.cs" />
+    <Compile Include="LovinModule\Genitals\RenderNodes\PawnRenderNode_Genitals.cs" />
+    <Compile Include="LovinModule\Genitals\BodyTypeGenitalsOffsetDef.cs" />
+    <Compile Include="LovinModule\Genitals\RenderNodes\PawnRenderNodeWorker_Genitals.cs" />
+    <Compile Include="FacePartsModule\RenderNodes\Mouth\PawnRenderNodeWorker_Mouth.cs" />
+    <Compile Include="FacePartsModule\RenderNodes\Eyes\PawnRenderNodeWorker_EyeAddon.cs" />
+    <Compile Include="FacePartsModule\RenderNodes\Eyes\PawnRenderNode_EyeAddon.cs" />
+    <Compile Include="FacePartsModule\RenderNodes\Mouth\PawnRenderNode_Mouth.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="MiscCommon\TexIcons.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Krafs.Rimworld.Ref">
+      <Version>1.6.4543</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

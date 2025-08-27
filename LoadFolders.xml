@@ -1,0 +1,10 @@
+﻿<loadFolders>
+	<v1.6>
+		<!-- Core Files -->
+		<li>/</li>
+		<li>1.6</li>
+		<li IfModActive="LovelyDovey.Sex.WithEuterpe">CompatAssemblies/Intimacy</li>
+		<li IfModActive="LovelyDovey.Sex.WithRosaline">CompatAssemblies/GenderWorks</li>
+		<li IfModActive="gerik.EchoColony">CompatAssemblies/EchoColony</li>
+	</v1.6>
+</loadFolders>

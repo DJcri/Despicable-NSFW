@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<HeroGizmo>Hero stats</HeroGizmo>
+	<HeroMenuTitle>Hero</HeroMenuTitle>
+	<ChooseHeroDialog>Choose {0} as hero?</ChooseHeroDialog>
+	<ChooseHeroButton>Confirm</ChooseHeroButton>
+	<!-- Deeds -->
+	<DeedsSectionLabel>Deeds</DeedsSectionLabel>
+	<Rescues>Rescues</Rescues>
+	<Treatments>Patient tends</Treatments>
+	<CriminalArrests>Criminal arrests</CriminalArrests>
+	<HealthyPrisonersReleased>Healthy prisoners released</HealthyPrisonersReleased>
+	<Charities>Charities satisfied</Charities>
+	<PawnsSentAway>Pawns sent away</PawnsSentAway>
+	<ChildrenHarmed>Children harmed</ChildrenHarmed>
+	<InnocentsHarmed>Innocents harmed</InnocentsHarmed>
+	<HumansButchered>Humanlikes butchered</HumansButchered>
+	<FalseArrests>Wrongful arrests</FalseArrests>
+	<EnslavementAttempts>Slavery attempts</EnslavementAttempts>
+	<Affairs>Affairs</Affairs>
+	<Rapes>Rapes committed</Rapes>
+	<!-- Stat Offsets -->
+	<StatOffsetsSectionLabel>Stat bonuses</StatOffsetsSectionLabel>
+	<StatsReport_KarmaOffset>Karma offset</StatsReport_KarmaOffset>
+	<!-- Karmaic Ability Descriptions -->
+	<Desc_Uplift>Moderately boost a colonist's mood with nice words, lasting 2 days.</Desc_Uplift>
+	<Desc_PepTalk>Give a colonist a pep-talk, increasing their productivity for 1 day.</Desc_PepTalk>
+	<Desc_PetAnimal>Pet a tamed, unbonded animal to bond with it.</Desc_PetAnimal>
+	<Desc_Proselytize>Talk to a colonist about your ideology, to try to convert them.</Desc_Proselytize>
+	<Desc_Torture>Beating prisoners will lower their will.</Desc_Torture>
+	<Desc_OperantTraining>Use brute force to train a tamed animal's next trainable instantly.</Desc_OperantTraining>
+	<Desc_Oversee>Interaction option to oversee a slave, giving them a boost in productivity for 1 day.</Desc_Oversee>
+	<Desc_FearMonger>Killing a pawn in combat, has a low chance of causing their faction to flee.</Desc_FearMonger>
+	<!-- Interaction options -->
+	<InteractionOption_Uplift>Uplift {0}'s mood</InteractionOption_Uplift>
+	<InteractionOption_PepTalk>Give {0} a pep-talk</InteractionOption_PepTalk>
+	<InteractionOption_Proselytize>Preach ideology to {0}</InteractionOption_Proselytize>
+	<InteractionOption_Oversee>Oversee {0}</InteractionOption_Oversee>
+</LanguageData>

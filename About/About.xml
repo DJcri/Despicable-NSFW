@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+	<packageId>DCSzar.Despicable</packageId>
+	<name>Despicable</name>
+	<author>DCSzar</author>
+	<description>
+	A lightweight alternative to RJW and NAL's facial animations. Built for maximum compatibility with vanilla-style mods. Less built for gooning, more-so built for immersion and extending characters and their interactions; Without changing gameplay much, if at all. Best used alongside Intimacy, but can work standalone. CREDITS TO C0FFEEE FOR ANIMATION FRAMEWORK!
+	</description>
+	<supportedVersions>
+		<li>1.6</li>
+	</supportedVersions>
+	<loadAfter>
+		<li>brrainz.harmony</li>
+		<li>LovelyDovey.Sex.WithEuterpe</li>
+		<li>LovelyDovey.Sex.WithRosaline</li>
+	</loadAfter>
+</ModMetaData>
