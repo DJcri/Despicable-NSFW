@@ -52,15 +52,8 @@ namespace Despicable
         public override Vector3 OffsetFor(PawnRenderNode node, PawnDrawParms parms, out Vector3 pivot)
         {
             Pawn pawn = parms.pawn;
-            float bodySize = pawn.BodySize;
             HeadTypeDef headType = pawn.story.headType;
             Vector3 vector = base.OffsetFor(node, parms, out pivot);
-            Vector2 headGraphicScale = pawn.Drawer.renderer.HeadGraphic.drawSize;
-
-            float lifeStageOffset = 0f;
-            lifeStageOffset = pawn.ageTracker.CurLifeStageIndex == 0 ? 0.045f : lifeStageOffset;
-            lifeStageOffset = pawn.ageTracker.CurLifeStageIndex == 1 ? 0.02f : lifeStageOffset;
-            lifeStageOffset = pawn.ageTracker.CurLifeStageIndex == 2 ? 0.02f : lifeStageOffset;
 
             float eyeOffset = 0.13f;
             if (headType.eyeOffsetEastWest.HasValue)
@@ -83,18 +76,18 @@ namespace Despicable
             {
                 if (node.Props.flipGraphic)
                 {
-                    vector.x += (0.09f - lifeStageOffset) * headGraphicScale.x;
+                    vector.x += 0.09f * (parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f);
                 }
                 else
                 {
-                    vector.x -= (0.09f - lifeStageOffset) * headGraphicScale.x;
+                    vector.x -= 0.09f * (parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f);
                 }
-            }
-            else
-            {
-                vector += side * ((eyeOffset - lifeStageOffset) * headGraphicScale.x);
+                vector *= parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f;
+                return vector;
             }
 
+            vector += side * (eyeOffset * (parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f));
+            vector *= parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f;
             return vector;
         }
     }

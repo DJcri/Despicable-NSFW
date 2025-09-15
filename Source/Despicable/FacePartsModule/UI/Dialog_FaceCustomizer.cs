@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -149,6 +150,30 @@ namespace Despicable
 
                 facePartsComp.mouthStyleDef = mouthStyles[mouthStyleIndex];
                 shouldUpdate = true;
+            }
+
+            // Draw button to add or remove head from blacklist
+            labelRect.y += ButSize.y + 16f;
+
+            HeadTypeDef headType = pawn.story.headType;
+
+            if (!FacePartsUtil.IsHeadBlacklisted(headType))
+            {
+                if (Widgets.ButtonText(labelRect, "Blacklist Head Type"))
+                {
+                    FacePartsUtil.AddHeadToBlacklist(headType);
+                    FacePartsUtil.SaveHeadTypeBlacklist();
+                    shouldUpdate = true;
+                }
+            }
+            else
+            {
+                if (Widgets.ButtonText(labelRect, "Unblacklist Head Type"))
+                {
+                    FacePartsUtil.RemoveHeadFromBlacklist(headType);
+                    FacePartsUtil.SaveHeadTypeBlacklist();
+                    shouldUpdate = true;
+                }
             }
 
             // Draw buttons

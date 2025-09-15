@@ -9,8 +9,9 @@ namespace Despicable
 {
     public class FacePartStyleDef : Def
     {
-        public byte? requiredGender;
+        public byte? requiredGender = null;
         public PawnRenderNodeTagDef renderNodeTag;
         public string texPath;
+        public int weight = 1;
     }
 }

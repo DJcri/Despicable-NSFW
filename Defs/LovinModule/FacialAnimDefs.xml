@@ -62,7 +62,7 @@
 		<durationTicks>10</durationTicks>
 		<keyframes>
 			<li Class="Despicable.FacialAnimKeyframeDef">
-				<tick>5</tick>
+				<tick>0</tick>
 				<expression>FA_Cheekful</expression>
 			</li>
 		</keyframes>

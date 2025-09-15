@@ -113,9 +113,8 @@ namespace Despicable
                         }
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    CommonUtil.DebugLog(e.ToString());
                 }
             };
             lovinToil.AddPreTickAction(delegate
@@ -149,7 +148,6 @@ namespace Despicable
                 }
                 catch (Exception e)
                 {
-                    CommonUtil.DebugLog(e.ToString());
                 }
 
                 if (durationTicks <= 0)

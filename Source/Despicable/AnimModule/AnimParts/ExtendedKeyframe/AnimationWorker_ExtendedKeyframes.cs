@@ -40,16 +40,18 @@ namespace Despicable
 
         public SoundDef SoundAtTick(int tick, AnimationPart part, Pawn pawn)
         {
+            if (pawn.TryGetComp<CompExtendedAnimator>()?.hasAnimPlaying != true)
+                return null;
+
             KeyframeAnimationPart keyframeAnimationPart = (KeyframeAnimationPart)part;
             Verse.Keyframe keyframe2 = keyframeAnimationPart.keyframes[keyframeAnimationPart.keyframes.Count - 1];
             foreach (Verse.Keyframe keyframe in keyframeAnimationPart.keyframes)
             {
                 if (tick == keyframe.tick)
                 {
-                    SoundDef sound = (keyframe as ExtendedKeyframe).sound;
+                    SoundDef sound = (keyframe as ExtendedKeyframe).sound ?? null;
 
-                    // Orgasm facial animation
-                    if (LovinUtil.IsLovin(pawn))
+                    if (sound != null)
                     {
                         CompFaceParts pawnFaceParts = pawn.TryGetComp<CompFaceParts>();
                         Pawn pawn2 = pawn.CurJob?.targetA.Pawn ?? null;
@@ -57,7 +59,7 @@ namespace Despicable
                         if (pawn2 != null)
                             pawn2FaceParts = pawn2.TryGetComp<CompFaceParts>() ?? null;
 
-                        if (sound == LovinModule_SoundDefOf.Cum)
+                        if (sound.defName == "Cum")
                         {
                             if (pawnFaceParts.enabled)
                             {
@@ -74,11 +76,12 @@ namespace Despicable
                                     pawn2FaceParts.PlayFacialAnim(LovinModule_FacialAnimDefOf.FacialAnim_Orgasm);
                             }
                         }
-                        else if (sound == LovinModule_SoundDefOf.Suck)
+                        else if (sound.defName == "Suck")
                         {
                             pawnFaceParts.PlayFacialAnim(LovinModule_FacialAnimDefOf.FacialAnim_Cheekful);
                         }
                     }
+                    // Orgasm facial animation
 
                     return sound;
                 }

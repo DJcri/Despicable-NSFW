@@ -9,7 +9,7 @@ using Verse.AI;
 using static Mono.Security.X509.X520;
 using static UnityEngine.Experimental.Rendering.RayTracingAccelerationStructure;
 
-namespace Despicable.ExtendedLovin.JobGivers
+namespace Despicable
 {
     public class JobGiver_GetBedLovin : ThinkNode_JobGiver
     {

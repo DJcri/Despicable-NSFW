@@ -9,11 +9,12 @@ using Verse;
 
 namespace Despicable
 {
+    // Renders the pawn's body when they are 'lovin',
+    // overriding the game's default rendering logic.
     [HarmonyPatch(typeof(PawnRenderNodeWorker_Body), "CanDrawNow")]
     public class HarmonyPatch_PawnRenderNodeWorkerBody
     {
-        // Allows body to render if bed lovin occurs
-        public static void Postfix(ref bool __result, ref PawnRenderNode node, ref PawnDrawParms parms)
+        public static void Postfix(ref bool __result, PawnDrawParms parms)
         {
             Pawn pawn = parms.pawn;
             if (LovinUtil.IsLovin(pawn))

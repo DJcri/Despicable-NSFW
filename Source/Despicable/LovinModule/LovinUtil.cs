@@ -222,6 +222,9 @@ namespace Despicable
 
         public static bool InSameBed(Pawn pawn, Pawn partner)
         {
+            if (pawn == null)
+                return false;
+
             if (pawn.InBed() && partner.InBed())
             {
                 if (pawn.CurrentBed() == partner.CurrentBed())
@@ -232,6 +235,9 @@ namespace Despicable
 
         public static bool AloneInBed(Pawn pawn)
         {
+            if (pawn == null)
+                return false;
+
             if (pawn.CurrentBed().CurOccupants.Count() == 1)
             {
                 return true;

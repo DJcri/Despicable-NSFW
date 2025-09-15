@@ -58,9 +58,9 @@ namespace Despicable
             {
                 PawnCacheCameraManager.PawnCacheRenderer.RenderPawn(pawn, image, Vector3.zero, 1f, angle, Rot4.South, renderHead: true, renderHeadgear: renderHeadgear, renderClothes: true, portrait: true, positionOffset);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Log.Error(ex.StackTrace);
+                Log.Error(e.StackTrace);
             }
         }
 

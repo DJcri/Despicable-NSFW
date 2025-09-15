@@ -14,7 +14,13 @@ namespace Despicable
         // [General Utilities]
         public static Settings GetSettings()
         {
-            return LoadedModManager.GetMod<Despicable>().GetSettings<Settings>();
+            var mod = Despicable.Instance;
+            if (mod == null)
+            {
+                // Return a default settings object to prevent NullReferenceException
+                return new Settings();
+            }
+            return mod.GetSettings<Settings>();
         }
 
         public static void DebugLog(string msg)

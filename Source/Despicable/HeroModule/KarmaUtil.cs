@@ -107,11 +107,25 @@ namespace Despicable
                 return false;
             }).ToList();
 
-            foreach (AbilityDef abilityDef in commandAbilities)
+            if (CommonUtil.GetSettings().heroModuleEnabled)
             {
-                if (IsAbilityActive((abilityDef.comps[0] as CompProperties_AbilityKarmaic).karmaicAbilityDef, pawn))
+                foreach (AbilityDef abilityDef in commandAbilities)
                 {
-                    pawn.abilities.GainAbility(abilityDef);
+                    if (IsAbilityActive((abilityDef.comps[0] as CompProperties_AbilityKarmaic).karmaicAbilityDef, pawn))
+                    {
+                        pawn.abilities.GainAbility(abilityDef);
+                    }
+                }
+            }
+            else
+            {
+                // Remove all karmaic abilities if hero module is disabled
+                foreach (var ability in pawn.abilities.AllAbilitiesForReading.ToList())
+                {
+                    if (ability.def.comps[0].GetType() == typeof(CompProperties_AbilityKarmaic))
+                    {
+                        pawn.abilities.RemoveAbility(ability.def);
+                    }
                 }
             }
         }

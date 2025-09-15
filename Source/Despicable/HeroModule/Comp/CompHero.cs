@@ -18,6 +18,7 @@ namespace Despicable
     {
         public bool isHero = false;
         public float karma = 0f;
+        public Pawn pawnInteractingWith = null;
 
         // Deed counter
         public Dictionary<string, int> deedCountValues = new Dictionary<string, int>();

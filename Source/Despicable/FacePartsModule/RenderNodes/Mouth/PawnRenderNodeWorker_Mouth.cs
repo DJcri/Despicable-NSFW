@@ -17,6 +17,11 @@ namespace Despicable
             {
                 Pawn pawn = parms.pawn;
 
+                if (pawn.style?.beardDef != BeardDefOf.NoBeard)
+                {
+                    return false;
+                }
+
                 // Don't render north for performance
                 if (!(parms.facing != Rot4.North))
                 {
@@ -44,12 +49,6 @@ namespace Despicable
             Pawn pawn = parms.pawn;
             HeadTypeDef headType = pawn.story.headType;
             Vector3 vector = base.OffsetFor(node, parms, out pivot);
-            Vector2 headGraphicScale = pawn.Drawer.renderer.HeadGraphic.drawSize;
-
-            float lifeStageOffset = 0f;
-            lifeStageOffset = pawn.ageTracker.CurLifeStageIndex == 0 ? 0.045f : lifeStageOffset;
-            lifeStageOffset = pawn.ageTracker.CurLifeStageIndex == 1 ? 0.02f : lifeStageOffset;
-            lifeStageOffset = pawn.ageTracker.CurLifeStageIndex == 2 ? 0.02f : lifeStageOffset;
 
             float eyeOffset = 0.13f;
             if (headType.eyeOffsetEastWest.HasValue)
@@ -65,7 +64,8 @@ namespace Despicable
                 side = Vector3.left;
             }
 
-            vector += side * (eyeOffset - lifeStageOffset) * headGraphicScale.x;
+            vector += side * (eyeOffset * (parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f));
+            vector *= parms.pawn.ageTracker.CurLifeStage.eyeSizeFactor ?? 1f;
 
             return vector;
         }

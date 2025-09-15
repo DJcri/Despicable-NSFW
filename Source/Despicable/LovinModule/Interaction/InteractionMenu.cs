@@ -35,17 +35,17 @@ namespace Despicable
             {
                 IEnumerable<LocalTargetInfo> validTargets = GenUI.TargetsAt(clickPos, TargetParameters);
 
+                // The user has clicked on something and the loop is running.
                 foreach (LocalTargetInfo target in validTargets)
                 {
-                    if (target == null)
-                        continue;
-
-                    // Ensure whether target can be interacted with
+                    // A quick way to get the pawn if it exists, otherwise it will be null.
+                    Pawn targetPawn = null;
                     if (target.Pawn != null)
                     {
-                        Pawn targetPawn = target.Pawn;
+                        targetPawn = target.Pawn;
 
-                        if (!targetPawn.RaceProps.Humanlike)
+                        // Check if RaceProps exists before using it.
+                        if (targetPawn.RaceProps == null || !targetPawn.RaceProps.Humanlike)
                             continue;
                         if (!targetPawn.Spawned)
                             continue;
@@ -53,27 +53,34 @@ namespace Despicable
                             continue;
                     }
 
-                    // Ensure target is reachable.
+                    // Only proceed if the target is a pawn.
+                    if (targetPawn == null)
+                        continue;
+
+                    // Check race properties and other flags.
+                    if (targetPawn.RaceProps == null || !targetPawn.RaceProps.Humanlike || !targetPawn.Spawned || targetPawn.IsHiddenFromPlayer())
+                        continue;
+
+                    // Check if the pawn can be reached.
                     if (!pawn.CanReach(target, PathEndMode.ClosestTouch, Danger.Deadly))
                         continue;
 
-                    if (pawn == target)
+                    // Handle same-pawn case separately.
+                    if (pawn == targetPawn)
                     {
-                        // Actions for self, implement content later
+                        // Actions for self
+                        // ...
                     }
-                    else if (target.Pawn != null)
+                    else
                     {
                         CommonUtil.DebugLog("Creating interaction option");
-                        if (target.Pawn.RaceProps.Humanlike)
+
+                        // The previous checks already ensured this is a humanlike pawn.
+                        FloatMenuOption option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionCategory".Translate(targetPawn.Name.ToStringShort), delegate ()
                         {
-                            // Create category option
-                            FloatMenuOption option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionCategory".Translate(target.Pawn.Name.ToStringShort), delegate ()
-                            {
-                                // When clicked, make menu out of a list of options
-                                FloatMenuUtility.MakeMenu(GenerateSocialOptions(pawn, target).Where(opt => opt.action != null), (FloatMenuOption opt) => opt.Label, (FloatMenuOption opt) => opt.action);
-                            }, MenuOptionPriority.High), pawn, target);
-                            opts.Add(option);
-                        }
+                            FloatMenuUtility.MakeMenu(GenerateSocialOptions(pawn, target).Where(opt => opt.action != null), (FloatMenuOption opt) => opt.Label, (FloatMenuOption opt) => opt.action);
+                        }, MenuOptionPriority.High), pawn, target);
+                        opts.Add(option);
                     }
                 }
             }

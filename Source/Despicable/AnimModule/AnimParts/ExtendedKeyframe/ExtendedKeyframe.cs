@@ -10,7 +10,7 @@ namespace Despicable
     public class ExtendedKeyframe : Keyframe
     {
         public int? variant;
-        public Rot4 rotation = Rot4.North;
+        public Rot4 rotation = Rot4.South;
         public SoundDef sound = null;
         public bool visible = false;
         public FacialAnimDef facialAnim = null;

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- Interaction options -->
+	<InteractionCategory>Interact with {0}</InteractionCategory>
+	<InteractionOption_SocialFight>Provoke {0}</InteractionOption_SocialFight>
+	<InteractionOption_Insult>Insult {0}'</InteractionOption_Insult>
+	<InteractionOption_Chat>Chat with {0}'</InteractionOption_Chat>
+	<InteractionOption_Lovin>Do lovin' with {0}</InteractionOption_Lovin>
+	<InteractionOption_Marriage>Propose to {0}</InteractionOption_Marriage>
+	<!-- Sex options -->
+	<SexOptionVaginalLabel>Have vaginal sex with {0}</SexOptionVaginalLabel>
+	<SexOptionBlowjobLabel>Participate in felatio with {0}</SexOptionBlowjobLabel>
+	<SexOptionCunnilingusLabel>Participate in cunnilingus with {0}</SexOptionCunnilingusLabel>
+	<SexOptionAnalLabel>Have anal sex with {0}</SexOptionAnalLabel>
+</LanguageData>

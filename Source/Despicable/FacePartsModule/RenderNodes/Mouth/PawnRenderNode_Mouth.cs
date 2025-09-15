@@ -25,10 +25,6 @@ namespace Despicable
             {
                 return null;
             }
-            if (pawn.style.beardDef != BeardDefOf.NoBeard)
-            {
-                return null;
-            }
             
             return GraphicDatabase.Get<Graphic_Multi>(this.TexPathFor(pawn), ShaderDatabase.Cutout, Vector2.one, ColorFor(pawn));
         }

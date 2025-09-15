@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- ThoughtDef for a minor negative interaction -->
+  <ThoughtDef>
+    <defName>TenseMoodEffect</defName>
+    <label>Tense Conversation</label>
+	<thoughtClass>Thought_MemorySocial</thoughtClass>
+    <description>That conversation was a bit awkward and tense.</description>
+    <durationDays>0.5</durationDays>
+    <stackLimit>1</stackLimit>
+    <stackedEffectMultiplier>1</stackedEffectMultiplier>
+    <nullifyingTraits>
+      <li>Kind</li>
+    </nullifyingTraits>
+    <nullifyingHediffs>
+      <li>PsychicHarmonizer</li>
+    </nullifyingHediffs>
+	<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+	<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+    <stages>
+      <li>
+        <label>Tense</label>
+        <description>The interaction left me feeling a bit off.</description>
+        <baseMoodEffect>-5</baseMoodEffect>
+		<baseOpinionOffset>-5</baseOpinionOffset>
+      </li>
+    </stages>
+  </ThoughtDef>
+  
+  <!-- ThoughtDef for a minor positive interaction -->
+  <ThoughtDef>
+    <defName>HopefulMoodEffect</defName>
+    <label>Hopeful Conversation</label>
+	<thoughtClass>Thought_MemorySocial</thoughtClass>
+    <description>That conversation went so well! It made me feel like things might turn out okay after all.</description>
+    <durationDays>1</durationDays>
+    <stackLimit>1</stackLimit>
+    <stackedEffectMultiplier>1</stackedEffectMultiplier>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+    </nullifyingTraits>
+	<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+	<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+    <stages>
+      <li>
+        <label>Hopeful</label>
+        <description>The interaction left me feeling a bit hopeful.</description>
+        <baseMoodEffect>3</baseMoodEffect>
+		<baseOpinionOffset>1</baseOpinionOffset>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <!-- ThoughtDef for a very positive interaction -->
+  <ThoughtDef>
+    <defName>JubilantMoodEffect</defName>
+    <label>Jubilant Conversation</label>
+	<thoughtClass>Thought_MemorySocial</thoughtClass>
+    <description>That was one of the best conversations I've ever had! I'm on top of the world.</description>
+    <durationDays>2</durationDays>
+    <stackLimit>1</stackLimit>
+    <stackedEffectMultiplier>1</stackedEffectMultiplier>
+    <nullifyingTraits>
+      <li>Psychopath</li>
+    </nullifyingTraits>
+	<developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+	<socialTargetDevelopmentalStageFilter>Baby, Child, Adult</socialTargetDevelopmentalStageFilter>
+    <stages>
+      <li>
+        <label>Jubilant</label>
+        <description>The interaction left me feeling ecstatic!</description>
+        <baseMoodEffect>12</baseMoodEffect>
+		<baseOpinionOffset>3</baseOpinionOffset>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+</Defs>

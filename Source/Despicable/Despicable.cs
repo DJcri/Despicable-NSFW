@@ -33,6 +33,7 @@ namespace Despicable
     /// </summary>
     public class Despicable : Mod
     {
+        public static Despicable Instance;
         public static Harmony harmony;
         public const string ModName = "Despicable";
         public Settings settings;
@@ -42,6 +43,7 @@ namespace Despicable
 
         public Despicable(ModContentPack content) : base(content)
         {
+            Instance = this;
             settings = GetSettings<Settings>();
             if (nlFacialInstalled)
                 settings.facialPartsExtensionEnabled = false;
@@ -84,6 +86,18 @@ namespace Despicable
                         nlFacialInstalled = true;
                         break;
                 }
+            }
+        }
+
+        // This is the Harmony patch that ensures your loading function is called at the right time.
+        [HarmonyPatch(typeof(PlayDataLoader), "DoPlayLoad")]
+        public static class PlayDataLoader_DoPlayLoad_Patch
+        {
+            [HarmonyPostfix]
+            public static void Postfix()
+            {
+                // This line calls your loading function only after all Defs are loaded.
+                FacePartsUtil.LoadHeadTypeBlacklist();
             }
         }
     }

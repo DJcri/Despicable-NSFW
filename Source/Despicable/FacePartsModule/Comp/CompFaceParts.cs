@@ -15,7 +15,7 @@ namespace Despicable
     /// </summary>
     public class CompFaceParts : ThingComp
     {
-        public bool enabled = CommonUtil.GetSettings().facialPartsExtensionEnabled;
+        public bool enabled;
         public bool shouldUpdate = false;
         public int ticks = 0;
         public static int blinkTickVariance = FacePartsUtil.blinkTickVariance;
@@ -24,9 +24,9 @@ namespace Despicable
         // Style paths
         private static readonly string defaultGenderPath = "Male/";
         public string genderPath = defaultGenderPath;
-        public FacePartStyleDef eyeStyleDef;
-        public FacePartStyleDef mouthStyleDef;
-        public string defaultEyeStyleTexPath = $"{FacePartsUtil.GenderedTag}eye_default";
+        public FacePartStyleDef eyeStyleDef = null;
+        public FacePartStyleDef mouthStyleDef = null;
+        public string defaultEyeStyleTexPath = $"Gendered/eye_default";
         public string defaultMouthStyleTexPath = "FaceParts/Mouths/mouth_indifferent";
 
         // Animation
@@ -139,9 +139,10 @@ namespace Despicable
                     shouldUpdate = false;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                CommonUtil.DebugLog(e.ToString());
+                Log.Error($"[Despicable] Error in CompFaceParts CompTick: {e}");
+                enabled = false;
             }
 
             ticks++;
@@ -153,22 +154,23 @@ namespace Despicable
         public override void Initialize(CompProperties props)
         {
             base.Initialize(props);
+            // Moved this from the constructor to here to prevent null reference on game load.
             TryInitActions();
+            enabled = CommonUtil.GetSettings()?.facialPartsExtensionEnabled ?? false;
         }
 
         public void TryInitActions()
         {
-            // Check if enabled, if not, continue to do nothing for performance
-            enabled = CommonUtil.GetSettings().facialPartsExtensionEnabled;
-            if (!enabled)
-                return;
-
             // Determine gender path
             genderPath = PawnStateUtil.ComparePawnGenderToByte(pawn, (byte)Gender.Female) ? "Female/" : defaultGenderPath;
 
             // Assign random style if missing style defs
             if (eyeStyleDef == null || mouthStyleDef == null)
-                AssignStylesRandom();
+                AssignStylesRandomByWeight();
+
+            // Check if enabled, if not, continue to do nothing for performance
+            if (!enabled)
+                return;
 
             // Alpha gene headtypes are not designed for faces to be plastered on them
             // So disable them here
@@ -176,19 +178,23 @@ namespace Despicable
             if (headType == null)
                 return;
 
+            if (FacePartsUtil.IsHeadBlacklisted(headType))
+            {
+                enabled = false;
+                return;
+            }
+
             if (headType.defName.ToLower().StartsWith("ag_"))
             {
                 enabled = false;
             }
         }
 
-        public void AssignStylesRandom()
+        public void AssignStylesRandomByWeight()
         {
-            // Assign new eyes
-            eyeStyleDef = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s => s.renderNodeTag.defName == "FacePart_Eye").RandomElement();
-
-            // Assign new mouth
-            mouthStyleDef = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s => s.renderNodeTag.defName == "FacePart_Mouth").Where(s =>
+            // Get lists of styles by face part type
+            List<FacePartStyleDef> eyeStyles = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s => s.renderNodeTag.defName == "FacePart_Eye").ToList();
+            List<FacePartStyleDef> mouthStyles = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s =>
             {
                 if (s.requiredGender != null)
                 {
@@ -199,7 +205,36 @@ namespace Despicable
                 }
                 return true;
 
-            }).RandomElement();
+            }).ToList();
+
+            // Total weight for each face part type
+            int totalEyeWeight = eyeStyles.Sum(s => s.weight);
+            int totalMouthWeight = mouthStyles.Sum(s => s.weight);
+
+            // Randomly select eye style based on weight
+            // Roll a random number between 0 and total weight
+            int eyeRoll = Rand.Range(0, totalEyeWeight);
+            foreach (var item in eyeStyles)
+            {
+                eyeRoll -= item.weight;
+                if (eyeRoll <= 0)
+                {
+                    eyeStyleDef = item;
+                    break;
+                }
+            }
+
+            // Do the same for mouth style
+            int mouthRoll = Rand.Range(0, totalMouthWeight);
+            foreach (var item in mouthStyles)
+            {
+                mouthRoll -= item.weight;
+                if (mouthRoll <= 0)
+                {
+                    mouthStyleDef = item;
+                    break;
+                }
+            }
         }
 
         public override void PostExposeData()
@@ -210,7 +245,7 @@ namespace Despicable
             Scribe_Values.Look(ref genderPath, "genderPath", defaultGenderPath);
             Scribe_Defs.Look(ref eyeStyleDef, "eyeStyleDef");
             Scribe_Defs.Look(ref mouthStyleDef, "mouthStyleDef");
-            Scribe_Values.Look(ref defaultEyeStyleTexPath, "defaultEyeStyleTexPath", $"{FacePartsUtil.GenderedTag}eye_default");
+            Scribe_Values.Look(ref defaultEyeStyleTexPath, "defaultEyeStyleTexPath", $"Gendered/eye_default");
             Scribe_Values.Look(ref defaultMouthStyleTexPath, "defaultMouthStyleTexPath", "FaceParts/Mouths/mouth_indifferent");
             Scribe_Defs.Look(ref baseExpression, "baseExpression");
             Scribe_Defs.Look(ref animExpression, "animExpression");
@@ -334,20 +369,18 @@ namespace Despicable
                     case "FacePart_Eye_L":
                     case "FacePart_Eye_R":
                         if (animExpression?.texPathEyes != null)
-                            facePartProps.texPath = GetEyePath(animExpression.texPathEyes);
+                            facePartProps.texPath = GetEyePath(animExpression?.texPathEyes);
                         else if (baseExpression?.texPathEyes != null)
-                            facePartProps.texPath = GetEyePath(baseExpression.texPathEyes);
+                            facePartProps.texPath = GetEyePath(baseExpression?.texPathEyes);
                         else
-                        {
-                            facePartProps.texPath = GetEyePath(eyeStyleDef?.texPath);
-                            facePartProps.texPath = facePartProps.texPath == "" ? GetEyePath(defaultEyeStyleTexPath) : facePartProps.texPath;
-                        }
+                            facePartProps.texPath = GetEyePath(eyeStyleDef?.texPath ?? defaultEyeStyleTexPath);
+                        facePartProps.texPath = GetEyePath(facePartProps.texPath);
                         break;
                     case "FacePart_Mouth":
                         if (animExpression?.texPathMouth != null)
-                            facePartProps.texPath = animExpression.texPathMouth;
+                            facePartProps.texPath = animExpression?.texPathMouth;
                         else if (baseExpression?.texPathMouth != null)
-                            facePartProps.texPath = baseExpression.texPathMouth;
+                            facePartProps.texPath = baseExpression?.texPathMouth;
                         else
                             facePartProps.texPath = mouthStyleDef?.texPath ?? defaultMouthStyleTexPath;
                         // Special case scenario, where mouth should use skin color
@@ -362,7 +395,7 @@ namespace Despicable
                             facePartProps.texPath = FacePartsUtil.TexPathBase + "Details/detail_empty";
                         else
                         {
-                            facePartProps.texPath = animExpression.texPathDetail ?? FacePartsUtil.TexPathBase + "Details/detail_empty";
+                            facePartProps.texPath = animExpression?.texPathDetail ?? FacePartsUtil.TexPathBase + "Details/detail_empty";
                         }
                         /// Base expression details are set and instantiated in the conditional section above, NOT HERE
                         /// Although, this will instantiate a detail node if using a facial animation
@@ -370,7 +403,7 @@ namespace Despicable
                 }
 
                 // Don't render if nothing to render
-                if (facePartProps.texPath.NullOrEmpty())
+                if (facePartProps.texPath.NullOrEmpty() || facePartProps.texPath.StartsWith("Gendered/"))
                 {
                     continue;
                 }
@@ -403,9 +436,9 @@ namespace Despicable
                 return string.Empty;
 
             // If path begins with "Gendered/" find the gendered texture
-            if (shortPath.StartsWith(FacePartsUtil.GenderedTag))
-                return FacePartsUtil.TexPathBase + $"Eyes/{shortPath.ReplaceFirst(FacePartsUtil.GenderedTag, genderPath)}";
-            
+            if (shortPath.StartsWith("Gendered/"))
+                return FacePartsUtil.TexPathBase + $"Eyes/{shortPath.ReplaceFirst("Gendered/", genderPath ?? defaultGenderPath)}";
+
             // Else, short path is the full path by default, so return it
             return shortPath;
         }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <InteractionDef>
+    <defName>Despicable_RomanceAttempt</defName>
+    <label>romance attempt</label>
+    <workerClass>Despicable.InteractionWorker_RomanceAttempt</workerClass>
+    <symbol>Things/Mote/SpeechSymbols/Romance</symbol>
+    <logRulesInitiator>
+      <rulesStrings>
+        <li>r_logentry->[INITIATOR_nameDef] wooed [RECIPIENT_nameDef].</li>
+      </rulesStrings>
+    </logRulesInitiator>
+  </InteractionDef>
+
+  <RulePackDef>
+    <defName>Sentence_RomanceAttemptAccepted</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>sent->[RECIPIENT_nameDef] was aroused by [INITIATOR_nameDef]'s words.</li>
+        <li>sent->[RECIPIENT_nameDef] was wooed by [INITIATOR_nameDef].</li>
+        <li>sent->[RECIPIENT_nameDef] became enamored because of [INITIATOR_nameDef].</li>
+        <li>sent->[RECIPIENT_nameDef] is smitten with [INITIATOR_nameDef].</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Sentence_RomanceAttemptRejected</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>sent->[RECIPIENT_nameDef] rejected the advance.</li>
+        <li>sent->[RECIPIENT_nameDef] ignored the advance.</li>
+        <li>sent->[RECIPIENT_nameDef] turned [RECIPIENT_possessive] back.</li>
+        <li>sent->[RECIPIENT_nameDef] turned away.</li>
+        <li>sent->[RECIPIENT_nameDef] gave a minimal response.</li>
+        <li>sent->[RECIPIENT_nameDef] did not respond.</li>
+        <li>sent->[RECIPIENT_nameDef] turned [INITIATOR_objective] down.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  
+
+  <InteractionDef>
+    <defName>Despicable_MarriageProposal</defName>
+    <label>marriage proposal</label>
+    <workerClass>Despicable.InteractionWorker_MarriageProposal</workerClass>
+    <symbol>Things/Mote/SpeechSymbols/MarriageProposal</symbol>
+    <logRulesInitiator>
+      <rulesStrings>
+        <li>r_logentry->[INITIATOR_nameDef] proposed marriage to [RECIPIENT_nameDef].</li>
+        <li>r_logentry->[INITIATOR_nameDef] proposed a lifelong commitment to [RECIPIENT_nameDef].</li>
+        <li>r_logentry->[INITIATOR_nameDef] told [RECIPIENT_nameDef] that [INITIATOR_pronoun] wants to spend [INITIATOR_possessive] life with [RECIPIENT_objective].</li>
+      </rulesStrings>
+    </logRulesInitiator>
+  </InteractionDef>
+
+  <RulePackDef>
+    <defName>Sentence_MarriageProposalAccepted</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>sent->[RECIPIENT_nameDef] agreed and the two are now engaged.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Sentence_MarriageProposalRejected</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>sent->[RECIPIENT_nameDef] rejected the proposal.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>Sentence_MarriageProposalRejectedBrokeUp</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>sent->It was too much for the relationship to continue, and the two have now broken up.</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+</Defs>

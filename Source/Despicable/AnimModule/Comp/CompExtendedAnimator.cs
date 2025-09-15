@@ -127,16 +127,17 @@ namespace Despicable
             Play();
         }
 
-        public void PlayQueue(AnimGroupDef animGroupDef, List<AnimationDef> anims, AnimationOffsetDef offsetDef, Thing anchor = null)
+        public void PlayQueue(AnimGroupDef animGroupDef, List<AnimationDef> anims, AnimationOffsetDef offsetDef = null, Thing anchor = null)
         {
             Reset();
 
             // Apply offsets
             this.anchor = anchor;
 
-            offsetDef.FindOffset(pawn, out BaseAnimationOffset offsets);
-            offset = offsets.getOffset(pawn) ?? Vector3.zero;
-            rotation = offsets.getRotation(pawn) ?? 0;
+            BaseAnimationOffset offsets = null;
+            offsetDef?.FindOffset(pawn, out offsets);
+            offset = offsets?.getOffset(pawn) ?? Vector3.zero;
+            rotation = offsets?.getRotation(pawn) ?? 0;
 
             animQueue.AddRange(anims);
             loopIndex.AddRange(animGroupDef.loopIndex);
@@ -146,16 +147,16 @@ namespace Despicable
         public void Reset()
         {
             hasAnimPlaying = false;
-            pawn.Drawer.renderer.SetAnimation(null);
+            pawn?.Drawer?.renderer?.SetAnimation(null);
             stage = 0;
             curLoop = 1;
             animationTicks = 0;
             rotation = 0;
             anchor = null;
             offset = Vector3.zero;
-            loopIndex.Clear();
-            animQueue.Clear();
-            pawn.Drawer.renderer.SetAllGraphicsDirty();
+            loopIndex?.Clear();
+            animQueue?.Clear();
+            pawn?.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public override List<PawnRenderNode> CompRenderNodes()
@@ -254,14 +255,18 @@ namespace Despicable
             if (rootNode == null) return;
             if (rootNode.AnimationWorker == null) return;
 
-            //check if the rootnode has sounds; if so play it
+            // Check if rootnode has sound to play at this tick
             if (rootNode?.AnimationWorker is AnimationWorker_ExtendedKeyframes animWorker)
             {
                 if (rootNode.tree != null)
                 {
                     AnimationPart animPart;
                     rootNode.tree.TryGetAnimationPartForNode(rootNode, out animPart);
-                    SoundDef sound = animWorker.SoundAtTick(rootNode.tree.AnimationTick, animPart, pawn);
+
+                    // Don't check for sound if there is no anim part
+                    if (animPart == null) return;
+
+                    SoundDef sound = animWorker.SoundAtTick(rootNode.tree.AnimationTick, animPart, pawn) ?? null;
 
                     if (sound != null)
                     {

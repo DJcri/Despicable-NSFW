@@ -43,15 +43,16 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimModule\AnimBuilder\Actor.cs" />
-    <Compile Include="AnimModule\AnimBuilder\Dialog_AnimBuilder.cs" />
     <Compile Include="AnimModule\AnimUtil.cs" />
+    <Compile Include="FacePartsModule\Data\HeadBlacklistData.cs" />
+    <Compile Include="FacePartsModule\Misc\HeadBlacklistDef.cs" />
     <Compile Include="FacePartsModule\FaceParts\FacePartStyleDef.cs" />
     <Compile Include="FacePartsModule\Patches\HarmonyPatch_AddFaceGizmo.cs" />
     <Compile Include="FacePartsModule\UI\Dialog_FaceCustomizer.cs" />
     <Compile Include="FacePartsModule\UI\FaceGizmo.cs" />
     <Compile Include="LovinModule\DefOf\LovinModule_PawnRenderNodeTagDefOf.cs" />
-    <Compile Include="LovinModule\Patches\HarmonyPatch_PawnRenderNodeWorkerBody.cs" />
+    <Compile Include="LovinModule\Patches\HarmonyPatch_ApparelCanDrawNow.cs" />
+    <Compile Include="LovinModule\Patches\HarmonyPatch_PawnRenderNodeWorkers.cs" />
     <Compile Include="MiscCommon\StatPart_ThoughtOffset.cs" />
     <Compile Include="HeroModule\DefOf\HeroModule_ThoughtDefOf.cs" />
     <Compile Include="LovinModule\DefOf\LovinModule_FacialAnimDefOf.cs" />
