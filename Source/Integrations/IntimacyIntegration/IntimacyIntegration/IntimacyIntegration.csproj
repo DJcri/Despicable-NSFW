@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <BaseOutputPath>C:\Users\deavy\source\repos\Despicable-NSFW\CompatAssemblies\Intimacy\Assemblies</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\1.6\Assemblies\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Despicable">
+      <HintPath>..\..\..\..\1.6\Assemblies\Despicable.dll</HintPath>
+    </Reference>
+    <Reference Include="LoveyDoveySexWithEuterpe">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\3498422643\1.6\Assemblies\LoveyDoveySexWithEuterpe.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

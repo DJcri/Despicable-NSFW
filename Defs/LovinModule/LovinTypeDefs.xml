@@ -21,4 +21,8 @@
 		<interaction>Interaction_AnalSex</interaction>
 		<requiresMale>true</requiresMale>
 	</Despicable.LovinTypeDef>
+	<Despicable.LovinTypeDef>
+		<defName>Solo</defName>
+		<interaction>Interaction_AnalSex</interaction>
+	</Despicable.LovinTypeDef>
 </Defs>
