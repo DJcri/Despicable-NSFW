@@ -70,8 +70,6 @@ namespace Despicable
             { "FalseArrests", -2f },
             { "EnslavementAttempts", -0.5f },
             { "Affairs", -3f },
-            /// I don't know if I want to add this
-            // { "Rapes", -5f } 
         };
 
         public static void UpdateKarma(CompHero heroComp)
@@ -84,7 +82,12 @@ namespace Despicable
 
             foreach (var key in deedCountValues.Keys)
             {
-                float karmaValue = KarmaUtil.karmaPerDeedValues[key];
+                float karmaValue;
+                if (!karmaPerDeedValues.TryGetValue(key, out karmaValue))
+                {
+                    continue;
+                }
+
                 int deedCount = deedCountValues[key];
                 result += deedCount * karmaValue;
             }

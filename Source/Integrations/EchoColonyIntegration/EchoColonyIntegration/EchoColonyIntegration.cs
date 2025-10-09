@@ -214,10 +214,8 @@ namespace Despicable
         [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
         public static class TryInteractWith_NamespaceCheck_Patch
         {
-            // ➡️ CHANGE 1: Change return type to 'bool' and add 'ref bool __result' ⬅️
             public static bool Prefix(Pawn recipient, InteractionDef intDef, ref bool __result)
             {
-                // Get the current call stack information.
                 StackTrace stackTrace = new StackTrace();
 
                 for (int i = 1; i < stackTrace.FrameCount; i++)
@@ -231,20 +229,13 @@ namespace Despicable
                     {
                         if (callingType.FullName.StartsWith("Despicable", StringComparison.Ordinal))
                         {
-                            // Call is coming from a class within your mod's namespace!
                             CommonUtil.DebugLog("[Despicable] - Detected call to TryInteractWith from Despicable mod, bypassing checks.");
-
-                            // ➡️ CHANGE 2: Set the result you want the original method to return ⬅️
-                            // Assuming you want the interaction to succeed if your mod calls it.
                             __result = true;
-
-                            // ➡️ CHANGE 3: RETURN FALSE to skip the original game method ⬅️
                             return false;
                         }
                     }
                 }
 
-                // ➡️ If your mod was NOT the caller, RETURN TRUE to run the original game method ⬅️
                 return true;
             }
         }
