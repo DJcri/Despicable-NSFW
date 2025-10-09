@@ -37,6 +37,7 @@
 			<debugLabel>FacePart_Detail_L</debugLabel>
 			<nodeClass>Despicable.PawnRenderNode_EyeAddon</nodeClass>
 			<workerClass>Despicable.PawnRenderNodeWorker_EyeAddon</workerClass>
+			<texPath>FaceParts/Details/detail_empty</texPath>
 			<tagDef>FacePart_Detail</tagDef>
 			<rotDrawMode>Fresh, Rotting</rotDrawMode>
 			<colorType>Custom</colorType>
@@ -49,6 +50,7 @@
 			<debugLabel>FacePart_SecondaryDetail_L</debugLabel>
 			<nodeClass>Despicable.PawnRenderNode_EyeAddon</nodeClass>
 			<workerClass>Despicable.PawnRenderNodeWorker_EyeAddon</workerClass>
+			<texPath>FaceParts/Details/detail_empty</texPath>
 			<tagDef>FacePart_Detail</tagDef>
 			<rotDrawMode>Fresh, Rotting</rotDrawMode>
 			<colorType>Custom</colorType>
@@ -101,6 +103,7 @@
 			<debugLabel>FacePart_Detail_R</debugLabel>
 			<nodeClass>Despicable.PawnRenderNode_EyeAddon</nodeClass>
 			<workerClass>Despicable.PawnRenderNodeWorker_EyeAddon</workerClass>
+			<texPath>FaceParts/Details/detail_empty</texPath>
 			<tagDef>FacePart_Detail</tagDef>
 			<rotDrawMode>Fresh, Rotting</rotDrawMode>
 			<colorType>Custom</colorType>
@@ -113,6 +116,7 @@
 			<debugLabel>FacePart_SecondaryDetail_R</debugLabel>
 			<nodeClass>Despicable.PawnRenderNode_EyeAddon</nodeClass>
 			<workerClass>Despicable.PawnRenderNodeWorker_EyeAddon</workerClass>
+			<texPath>FaceParts/Details/detail_empty</texPath>
 			<tagDef>FacePart_Detail</tagDef>
 			<rotDrawMode>Fresh, Rotting</rotDrawMode>
 			<colorType>Custom</colorType>

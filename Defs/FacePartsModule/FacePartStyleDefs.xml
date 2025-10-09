@@ -52,11 +52,18 @@
 	</Despicable.FacePartStyleDef>
 	<!-- Mouths -->
 	<Despicable.FacePartStyleDef>
-		<defName>Mouth_Basic</defName>
-		<label>Basic Mouth</label>
+		<defName>Mouth_Standard</defName>
+		<label>Standard</label>
+		<renderNodeTag>FacePart_Mouth</renderNodeTag>
+		<texPath>FaceParts/Mouths/mouth_neutral</texPath>
+		<weight>8</weight>
+	</Despicable.FacePartStyleDef>
+	<Despicable.FacePartStyleDef>
+		<defName>Mouth_Indifferent</defName>
+		<label>Indifferent</label>
 		<renderNodeTag>FacePart_Mouth</renderNodeTag>
 		<texPath>FaceParts/Mouths/mouth_indifferent</texPath>
-		<weight>8</weight>
+		<weight>5</weight>
 	</Despicable.FacePartStyleDef>
 	<Despicable.FacePartStyleDef>
 		<defName>Mouth_Derp</defName>

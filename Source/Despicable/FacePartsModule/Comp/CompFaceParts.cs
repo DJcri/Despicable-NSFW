@@ -447,6 +447,10 @@ namespace Despicable
             {
                 Log.Warning($"[Despicable] - Mouth part not reached when rendering face parts for {pawn.NameFullColored} - this is a bug!");
             }
+            else
+            {
+                Log.Message($"[Despicable] - Mouth part reached when rendering face parts for {pawn.NameFullColored}");
+            }
 
             return facePartNodes;
         }
