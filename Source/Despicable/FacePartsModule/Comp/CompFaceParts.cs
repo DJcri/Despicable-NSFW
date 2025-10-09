@@ -13,6 +13,7 @@ namespace Despicable
     /// <summary>
     /// Handles logic of RENDERING FACES and FACIAL ANIMATION
     /// </summary>
+    
     public class CompFaceParts : ThingComp
     {
         public bool enabled;
@@ -154,7 +155,6 @@ namespace Despicable
         public override void Initialize(CompProperties props)
         {
             base.Initialize(props);
-            // Moved this from the constructor to here to prevent null reference on game load.
             TryInitActions();
             enabled = CommonUtil.GetSettings()?.facialPartsExtensionEnabled ?? false;
         }
@@ -166,7 +166,10 @@ namespace Despicable
 
             // Assign random style if missing style defs
             if (eyeStyleDef == null && mouthStyleDef == null)
+            {
                 AssignStylesRandomByWeight();
+                shouldUpdate = true;
+            }
 
             // Check if enabled, if not, continue to do nothing for performance
             if (!enabled)
@@ -189,9 +192,6 @@ namespace Despicable
                 enabled = false;
                 return;
             }
-
-            CommonUtil.DebugLog($"[Despicable] - Initialized CompFaceParts for {pawn.Name}");
-            CommonUtil.DebugLog($"[Despicable] - Mouth for {pawn.Name}: {mouthStyleDef.texPath}");
         }
 
         public void AssignStylesRandomByWeight()
@@ -381,12 +381,17 @@ namespace Despicable
                         facePartProps.texPath = GetEyePath(facePartProps.texPath);
                         break;
                     case "FacePart_Mouth":
-                        if (animExpression?.texPathMouth != null)
-                            facePartProps.texPath = animExpression?.texPathMouth;
-                        else if (baseExpression?.texPathMouth != null)
-                            facePartProps.texPath = baseExpression?.texPathMouth;
-                        else
-                            facePartProps.texPath = mouthStyleDef?.texPath ?? defaultMouthStyleTexPath;
+                        // Fallback to ensure mouth renders
+                        facePartProps.texPath = defaultMouthStyleTexPath;
+                        if (!(mouthStyleDef?.texPath).NullOrEmpty())
+                            facePartProps.texPath = mouthStyleDef.texPath;
+
+                        // Override with conditional expression
+                        if (!(animExpression?.texPathMouth).NullOrEmpty())
+                            facePartProps.texPath = animExpression.texPathMouth;
+                        else if (!(baseExpression?.texPathMouth).NullOrEmpty())
+                            facePartProps.texPath = baseExpression.texPathMouth;
+
                         // Special case scenario, where mouth should use skin color
                         if (facePartProps.texPath == FacePartsUtil.TexPathBase + "Mouths/mouth_cheekful")
                             facePartProps.colorType = PawnRenderNodeProperties.AttachmentColorType.Skin;
