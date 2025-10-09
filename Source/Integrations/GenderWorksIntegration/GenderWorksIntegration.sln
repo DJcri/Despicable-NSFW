@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenderWorks", "GenderWorksIntegration\GenderWorks.csproj", "{560ED683-D1AC-4556-976B-5133E48AC0CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenderWorksIntegration", "GenderWorksIntegration\GenderWorksIntegration.csproj", "{560ED683-D1AC-4556-976B-5133E48AC0CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

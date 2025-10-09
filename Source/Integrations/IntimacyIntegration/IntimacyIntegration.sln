@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntimacyIntegration", "IntimacyIntegration\IntimacyIntegration.csproj", "{A902E1EC-6D18-4A9A-8114-24C1F1EA6BF6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntimacyIntegration", "IntimacyIntegration\IntimacyIntegration.csproj", "{BD5EE576-D297-489A-8E5E-48774D6DEDCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A902E1EC-6D18-4A9A-8114-24C1F1EA6BF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A902E1EC-6D18-4A9A-8114-24C1F1EA6BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A902E1EC-6D18-4A9A-8114-24C1F1EA6BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A902E1EC-6D18-4A9A-8114-24C1F1EA6BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5EE576-D297-489A-8E5E-48774D6DEDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5EE576-D297-489A-8E5E-48774D6DEDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5EE576-D297-489A-8E5E-48774D6DEDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5EE576-D297-489A-8E5E-48774D6DEDCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {DF49CCFA-DB83-4344-984A-A60AE98279CB}
+		SolutionGuid = {F840A7F0-2DBC-4AC4-A844-0428F17CD591}
 	EndGlobalSection
 EndGlobal

@@ -40,7 +40,7 @@ namespace Despicable
             }
             catch (Exception ex)
             {
-                Log.Error("Despicable - GenderWorksIntegration: " + ex.ToString());
+                Log.Error("[Despicable] - GenderWorksIntegration: " + ex.ToString());
             }
         }
     }
