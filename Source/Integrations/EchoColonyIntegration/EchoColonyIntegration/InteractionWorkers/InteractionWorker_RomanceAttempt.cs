@@ -9,6 +9,7 @@ using Verse;
 
 namespace Despicable
 {
+    [StaticConstructorOnStartup]
     public class InteractionWorker_RomanceAttempt : InteractionWorker
     {
         private const float MinRomanceChanceForRomanceAttempt = 0.15f;

@@ -134,9 +134,9 @@ namespace Despicable
 
                 if (shouldUpdate || ticks == 0)
                 {
+                    shouldUpdate = false;
                     TryInitActions();
                     pawn.Drawer.renderer.SetAllGraphicsDirty();
-                    shouldUpdate = false;
                 }
             }
             catch (Exception e)
@@ -165,7 +165,7 @@ namespace Despicable
             genderPath = PawnStateUtil.ComparePawnGenderToByte(pawn, (byte)Gender.Female) ? "Female/" : defaultGenderPath;
 
             // Assign random style if missing style defs
-            if (eyeStyleDef == null || mouthStyleDef == null)
+            if (eyeStyleDef == null && mouthStyleDef == null)
                 AssignStylesRandomByWeight();
 
             // Check if enabled, if not, continue to do nothing for performance
@@ -187,7 +187,11 @@ namespace Despicable
             if (headType.defName.ToLower().StartsWith("ag_"))
             {
                 enabled = false;
+                return;
             }
+
+            CommonUtil.DebugLog($"[Despicable] - Initialized CompFaceParts for {pawn.Name}");
+            CommonUtil.DebugLog($"[Despicable] - Mouth for {pawn.Name}: {mouthStyleDef.texPath}");
         }
 
         public void AssignStylesRandomByWeight()

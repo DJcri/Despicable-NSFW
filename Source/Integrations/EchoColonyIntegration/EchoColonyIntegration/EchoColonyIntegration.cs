@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
@@ -113,6 +114,9 @@ namespace Despicable
         // Prefix method that parses a JSON object from the AI's response and applies the effects.
         public static bool Prefix(string json, ref string __result)
         {
+            if (json.NullOrEmpty())
+                return true;
+
             Pawn heroPawn = HeroUtil.FindHero();
             CommonUtil.DebugLog("[Despicable] - Checking for hero pawn...");
             if (heroPawn == null)
@@ -204,6 +208,45 @@ namespace Despicable
 
             // Returns true to allow the original method to run its course.
             return true;
+        }
+
+        // Patch for "TryInteractWith" to ignore checking for certain conditions if called from this mod.
+        [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
+        public static class TryInteractWith_NamespaceCheck_Patch
+        {
+            // ➡️ CHANGE 1: Change return type to 'bool' and add 'ref bool __result' ⬅️
+            public static bool Prefix(Pawn recipient, InteractionDef intDef, ref bool __result)
+            {
+                // Get the current call stack information.
+                StackTrace stackTrace = new StackTrace();
+
+                for (int i = 1; i < stackTrace.FrameCount; i++)
+                {
+                    StackFrame frame = stackTrace.GetFrame(i);
+                    MethodBase callingMethod = frame.GetMethod();
+
+                    Type callingType = callingMethod?.DeclaringType;
+
+                    if (callingType != null)
+                    {
+                        if (callingType.FullName.StartsWith("Despicable", StringComparison.Ordinal))
+                        {
+                            // Call is coming from a class within your mod's namespace!
+                            CommonUtil.DebugLog("[Despicable] - Detected call to TryInteractWith from Despicable mod, bypassing checks.");
+
+                            // ➡️ CHANGE 2: Set the result you want the original method to return ⬅️
+                            // Assuming you want the interaction to succeed if your mod calls it.
+                            __result = true;
+
+                            // ➡️ CHANGE 3: RETURN FALSE to skip the original game method ⬅️
+                            return false;
+                        }
+                    }
+                }
+
+                // ➡️ If your mod was NOT the caller, RETURN TRUE to run the original game method ⬅️
+                return true;
+            }
         }
 
         // Utility method to extract just the dialogue from the AI's full response.

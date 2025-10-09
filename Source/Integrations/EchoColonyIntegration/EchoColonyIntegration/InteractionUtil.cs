@@ -4,70 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEngine;
 using Verse;
 
-namespace Despicable
+namespace EchoColonyIntegration
 {
-    [StaticConstructorOnStartup]
-    public class InteractionWorker_MarriageProposal : InteractionWorker
+    public static class InteractionUtil
     {
-        private const float BaseSelectionWeight = 0.4f;
-
-        public float BaseAcceptanceChance = 0.9f;
-
-        private const float BreakupChanceOnRejection = 0.4f;
-
-        public override float RandomSelectionWeight(Pawn initiator, Pawn recipient)
-        {
-            DirectPawnRelation directRelation = initiator.relations.GetDirectRelation(PawnRelationDefOf.Lover, recipient);
-            if (directRelation == null)
-            {
-                return 0f;
-            }
-            if (initiator.Inhumanized())
-            {
-                return 0f;
-            }
-            HistoryEvent ev = new HistoryEvent(initiator.GetHistoryEventForSpouseAndFianceCountPlusOne(), initiator.Named(HistoryEventArgsNames.Doer));
-            HistoryEvent ev2 = new HistoryEvent(recipient.GetHistoryEventForSpouseAndFianceCountPlusOne(), recipient.Named(HistoryEventArgsNames.Doer));
-            if (!ev.DoerWillingToDo() || !ev2.DoerWillingToDo())
-            {
-                return 0f;
-            }
-            float num = 0.4f;
-            float value = (float)(Find.TickManager.TicksGame - directRelation.startTicks) / 60000f;
-            num *= Mathf.InverseLerp(0f, 60f, value);
-            num *= Mathf.InverseLerp(0f, 60f, initiator.relations.OpinionOf(recipient));
-            if (recipient.relations.OpinionOf(initiator) < 0)
-            {
-                num *= 0.3f;
-            }
-            if (initiator.gender == Gender.Female)
-            {
-                num *= 0.2f;
-            }
-            HediffWithTarget hediffWithTarget = (HediffWithTarget)initiator.health.hediffSet.GetFirstHediffOfDef(HediffDefOf.PsychicLove);
-            if (hediffWithTarget != null && hediffWithTarget.target == recipient)
-            {
-                num *= 10f;
-            }
-            if (initiator.health.hediffSet.HasPregnancyHediff() || recipient.health.hediffSet.HasPregnancyHediff())
-            {
-                num *= 3f;
-            }
-            foreach (Pawn child in initiator.relations.Children)
-            {
-                if (child.DevelopmentalStage.Baby() && !child.Dead && recipient.relations.Children.Contains(child))
-                {
-                    num *= 2f;
-                    break;
-                }
-            }
-            return num;
-        }
-
-        public override void Interacted(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
+        public override void SimulateRomanceAttempt(Pawn initiator, Pawn recipient, List<RulePackDef> extraSentencePacks, out string letterText, out string letterLabel, out LetterDef letterDef, out LookTargets lookTargets)
         {
             float num = AcceptanceChance(initiator, recipient);
             bool flag = Rand.Value < num;
@@ -146,11 +89,6 @@ namespace Despicable
                 letterDef = null;
                 lookTargets = null;
             }
-        }
-
-        public float AcceptanceChance(Pawn initiator, Pawn recipient)
-        {
-            return BaseAcceptanceChance;
         }
     }
 }
