@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using LoveyDoveySexWithRosaline;
+using System;
 using Verse;
 
 /// <summary>
@@ -24,7 +25,6 @@ namespace Despicable
         [HarmonyPostfix]
         public static void Postfix(ref bool __result, ref Pawn pawn, ref byte otherGender)
         {
-            CommonUtil.DebugLog("[Gender Works] - Running gender check");
             try
             {
                 bool num = GenderUtilities.HasMaleReproductiveOrgan(pawn);
@@ -40,7 +40,7 @@ namespace Despicable
             }
             catch (Exception ex)
             {
-                CommonUtil.DebugLog(ex.ToString());
+                Log.Error("Despicable - GenderWorksIntegration: " + ex.ToString());
             }
         }
     }

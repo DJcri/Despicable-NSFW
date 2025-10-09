@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenderWorksIntegration", "GenderWorksIntegration\GenderWorksIntegration.csproj", "{80188DBF-6A8F-481C-BFC3-91E66256B6A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenderWorks", "GenderWorksIntegration\GenderWorks.csproj", "{560ED683-D1AC-4556-976B-5133E48AC0CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{80188DBF-6A8F-481C-BFC3-91E66256B6A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{80188DBF-6A8F-481C-BFC3-91E66256B6A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{80188DBF-6A8F-481C-BFC3-91E66256B6A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{80188DBF-6A8F-481C-BFC3-91E66256B6A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{560ED683-D1AC-4556-976B-5133E48AC0CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{560ED683-D1AC-4556-976B-5133E48AC0CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{560ED683-D1AC-4556-976B-5133E48AC0CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{560ED683-D1AC-4556-976B-5133E48AC0CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {30AB3511-39CD-469F-A5E4-C4469A32E409}
+		SolutionGuid = {065C9A00-6930-4A30-922D-77D73DF2E634}
 	EndGlobalSection
 EndGlobal
