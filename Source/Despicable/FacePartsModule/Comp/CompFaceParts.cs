@@ -133,16 +133,18 @@ namespace Despicable
                     }
                 }
 
-                if (shouldUpdate || ticks == 0)
+                if (ticks == 1)
+                    TryInitActions();
+
+                if (shouldUpdate)
                 {
                     shouldUpdate = false;
-                    TryInitActions();
                     pawn.Drawer.renderer.SetAllGraphicsDirty();
                 }
             }
             catch (Exception e)
             {
-                Log.Error($"[Despicable] Error in CompFaceParts CompTick: {e}");
+                Log.Error($"[Despicable] - Error in CompFaceParts CompTick: {e}");
                 enabled = false;
             }
 
@@ -168,7 +170,6 @@ namespace Despicable
             if (eyeStyleDef == null && mouthStyleDef == null)
             {
                 AssignStylesRandomByWeight();
-                shouldUpdate = true;
             }
 
             // Check if enabled, if not, continue to do nothing for performance
@@ -239,6 +240,8 @@ namespace Despicable
                     break;
                 }
             }
+
+            shouldUpdate = true;
         }
 
         public override void PostExposeData()
@@ -365,75 +368,84 @@ namespace Despicable
             }
 
             // Render using animation first, conditional second, style last
+            bool mouthReached = false; // For debugging purposes
             foreach (FacePartDef facePartDef in DefDatabase<FacePartDef>.AllDefsListForReading.ToList())
             {
-                PawnRenderNodeProperties facePartProps = facePartDef.properties;
-                switch (facePartProps.debugLabel)
+                try
                 {
-                    case "FacePart_Eye_L":
-                    case "FacePart_Eye_R":
-                        if (animExpression?.texPathEyes != null)
-                            facePartProps.texPath = GetEyePath(animExpression?.texPathEyes);
-                        else if (baseExpression?.texPathEyes != null)
-                            facePartProps.texPath = GetEyePath(baseExpression?.texPathEyes);
-                        else
-                            facePartProps.texPath = GetEyePath(eyeStyleDef?.texPath ?? defaultEyeStyleTexPath);
-                        facePartProps.texPath = GetEyePath(facePartProps.texPath);
-                        break;
-                    case "FacePart_Mouth":
-                        // Fallback to ensure mouth renders
-                        facePartProps.texPath = defaultMouthStyleTexPath;
-                        if (!(mouthStyleDef?.texPath).NullOrEmpty())
-                            facePartProps.texPath = mouthStyleDef.texPath;
+                    PawnRenderNodeProperties facePartProps = facePartDef.properties;
+                    switch (facePartProps.debugLabel)
+                    {
+                        case "FacePart_Eye_L":
+                        case "FacePart_Eye_R":
+                            if (animExpression?.texPathEyes != null)
+                                facePartProps.texPath = GetEyePath(animExpression?.texPathEyes);
+                            else if (baseExpression?.texPathEyes != null)
+                                facePartProps.texPath = GetEyePath(baseExpression?.texPathEyes);
+                            else
+                                facePartProps.texPath = GetEyePath(eyeStyleDef?.texPath ?? defaultEyeStyleTexPath);
+                            facePartProps.texPath = GetEyePath(facePartProps.texPath); // Ensures it's a valid path
+                            break;
+                        case "FacePart_Mouth":
+                            if (!(animExpression?.texPathMouth).NullOrEmpty())
+                                facePartProps.texPath = animExpression.texPathMouth;
+                            else if (!(baseExpression?.texPathMouth).NullOrEmpty())
+                                facePartProps.texPath = baseExpression.texPathMouth;
+                            else
+                                facePartProps.texPath = mouthStyleDef.texPath;
 
-                        // Override with conditional expression
-                        if (!(animExpression?.texPathMouth).NullOrEmpty())
-                            facePartProps.texPath = animExpression.texPathMouth;
-                        else if (!(baseExpression?.texPathMouth).NullOrEmpty())
-                            facePartProps.texPath = baseExpression.texPathMouth;
+                            // Special case scenario, where mouth should use skin color
+                            if (facePartProps.texPath == FacePartsUtil.TexPathBase + "Mouths/mouth_cheekful")
+                                facePartProps.colorType = PawnRenderNodeProperties.AttachmentColorType.Skin;
+                            else
+                                facePartProps.colorType = PawnRenderNodeProperties.AttachmentColorType.Custom;
 
-                        // Special case scenario, where mouth should use skin color
-                        if (facePartProps.texPath == FacePartsUtil.TexPathBase + "Mouths/mouth_cheekful")
-                            facePartProps.colorType = PawnRenderNodeProperties.AttachmentColorType.Skin;
-                        else
-                            facePartProps.colorType = PawnRenderNodeProperties.AttachmentColorType.Custom;
-                        break;
-                    case "FacePart_SecondaryDetail_L":
-                    case "FacePart_SecondaryDetail_R":
-                        if (this.animExpression == null)
-                            facePartProps.texPath = FacePartsUtil.TexPathBase + "Details/detail_empty";
-                        else
+                            mouthReached = true;
+                            break;
+                        case "FacePart_SecondaryDetail_L":
+                        case "FacePart_SecondaryDetail_R":
+                            if (this.animExpression != null)
+                                facePartProps.texPath = animExpression?.texPathDetail ?? FacePartsUtil.TexPathBase + "Details/detail_empty";
+
+                            /// Base expression details are set and instantiated in the conditional section above, NOT HERE
+                            /// Although, this will instantiate a detail node if using a facial animation
+                            break;
+                    }
+
+                    // Don't render if nothing to render
+                    if (facePartProps.texPath.NullOrEmpty() || facePartProps.texPath.StartsWith("Gendered/"))
+                    {
+                        continue;
+                    }
+
+                    //** Make sure the graphics are flipped correctly (IF FACING SOUTH!)
+                    /// flipping the textures to try to mirror the left half will provide the opposite effect
+                    /// since, by default if a pawn faces west all textures are FLIPPED ALREADY
+                    /// SO ONLY FLIP WHEN MIRRORING WHILE FACING THE CAMERA
+                    if (pawn.Rotation != Rot4.East && pawn.Rotation != Rot4.West)
+                    {
+                        if (facePartProps.debugLabel.ToLower().EndsWith("_r"))
                         {
-                            facePartProps.texPath = animExpression?.texPathDetail ?? FacePartsUtil.TexPathBase + "Details/detail_empty";
+                            facePartProps.flipGraphic = true;
                         }
-                        /// Base expression details are set and instantiated in the conditional section above, NOT HERE
-                        /// Although, this will instantiate a detail node if using a facial animation
-                        break;
-                }
+                    }
 
-                // Don't render if nothing to render
-                if (facePartProps.texPath.NullOrEmpty() || facePartProps.texPath.StartsWith("Gendered/"))
+                    // Prevent face part from rendering on the back side of the pawn's head when flipped 
+                    facePartProps.oppositeFacingLayerWhenFlipped = false;
+
+                    PawnRenderNode facePartNode = CommonUtil.CreateNode(pawn, facePartProps, PawnRenderNodeTagDefOf.Head);
+                    facePartNodes.Add(facePartNode);
+                }
+                catch (Exception e)
                 {
+                    Log.Error($"[Despicable] - Error in CompFaceParts CompRenderNodes for {facePartDef.defName}: {e}");
                     continue;
                 }
+            }
 
-                //** Make sure the graphics are flipped correctly (IF FACING SOUTH!)
-                /// flipping the textures to try to mirror the left half will provide the opposite effect
-                /// since, by default if a pawn faces west all textures are FLIPPED ALREADY
-                /// SO ONLY FLIP WHEN MIRRORING WHILE FACING THE CAMERA
-                if (pawn.Rotation != Rot4.East && pawn.Rotation != Rot4.West)
-                {
-                    if (facePartProps.debugLabel.ToLower().EndsWith("_r"))
-                    {
-                        facePartProps.flipGraphic = true;
-                    }
-                }
-
-                // Prevent face part from rendering on the back side of the pawn's head when flipped 
-                facePartProps.oppositeFacingLayerWhenFlipped = false;
-
-                PawnRenderNode facePartNode = CommonUtil.CreateNode(pawn, facePartProps, PawnRenderNodeTagDefOf.Head);
-                facePartNodes.Add(facePartNode);
+            if (!mouthReached)
+            {
+                Log.Warning($"[Despicable] - Mouth part not reached when rendering face parts for {pawn.NameFullColored} - this is a bug!");
             }
 
             return facePartNodes;
