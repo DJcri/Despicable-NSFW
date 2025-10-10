@@ -125,7 +125,7 @@ namespace Despicable
             if (this.props.texPath.NullOrEmpty())
                 this.props.texPath = "FaceParts/Details/detail_empty";
 
-            return GraphicDatabase.Get<Graphic_Multi>(this.props.texPath, ShaderDatabase.CutoutSkinOverlay, props.drawSize, ColorFor(pawn));
+            return GraphicDatabase.Get<Graphic_Multi>(FacePartsUtil.GetEyePath(pawn, this.props.texPath), ShaderDatabase.CutoutSkinOverlay, props.drawSize, ColorFor(pawn));
         }
     }
 }
