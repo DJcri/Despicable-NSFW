@@ -18,6 +18,7 @@ namespace Despicable
         public PawnRenderNode_EyeAddon(Pawn pawn, PawnRenderNodeProperties props, PawnRenderTree tree) : base(pawn, props, tree)
         {
             compFaceParts = pawn.TryGetComp<CompFaceParts>();
+            props.texPath = FacePartsUtil.GetEyePath(pawn, props.texPath);
         }
 
         public override GraphicMeshSet MeshSetFor(Pawn pawn)
