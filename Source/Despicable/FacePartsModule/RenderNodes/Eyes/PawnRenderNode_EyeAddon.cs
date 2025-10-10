@@ -52,7 +52,6 @@ namespace Despicable
                             this.props.texPath = FacePartsUtil.GetEyePath(pawn, compFaceParts.baseExpression?.texPathEyes);
                         else if (compFaceParts.eyeStyleDef != null && !compFaceParts.eyeStyleDef.texPath.NullOrEmpty())
                             this.props.texPath = FacePartsUtil.GetEyePath(pawn, compFaceParts.eyeStyleDef?.texPath);
-                        this.props.texPath = FacePartsUtil.GetEyePath(pawn, this.props.texPath); // Ensures it's a valid path
                         break;
                     case "FacePart_Detail_L":
                     case "FacePart_Detail_R":
@@ -126,7 +125,8 @@ namespace Despicable
             if (this.props.texPath.NullOrEmpty())
                 this.props.texPath = "FaceParts/Details/detail_empty";
 
-            return GraphicDatabase.Get<Graphic_Multi>(FacePartsUtil.GetEyePath(pawn, this.props.texPath), ShaderDatabase.CutoutSkinOverlay, props.drawSize, ColorFor(pawn));
+            this.props.texPath = FacePartsUtil.GetEyePath(pawn, this.props.texPath); // Ensures it's a valid path
+            return GraphicDatabase.Get<Graphic_Multi>(this.props.texPath, ShaderDatabase.CutoutSkinOverlay, props.drawSize, ColorFor(pawn));
         }
     }
 }
