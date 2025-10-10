@@ -266,9 +266,9 @@ namespace Despicable
             Scribe_Values.Look(ref genderPath, "genderPath", DEFAULT_GENDER_PATH);
             Scribe_Defs.Look(ref eyeStyleDef, "eyeStyleDef");
             Scribe_Defs.Look(ref mouthStyleDef, "mouthStyleDef");
-            Scribe_Defs.Look(ref baseExpression, "baseExpression");
-            Scribe_Defs.Look(ref animExpression, "animExpression");
-            Scribe_Defs.Look(ref facialAnim, "facialAnim");
+            Scribe_Deep.Look(ref baseExpression, "baseExpression", null);
+            Scribe_Deep.Look(ref animExpression, "animExpression", null);
+            Scribe_Deep.Look(ref facialAnim, "facialAnim");
             Scribe_Values.Look(ref animTicks, "animTicks", 0);
         }
 
