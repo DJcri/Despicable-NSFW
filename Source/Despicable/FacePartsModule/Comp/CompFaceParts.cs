@@ -194,21 +194,27 @@ namespace Despicable
 
         public void AssignStylesRandomByWeight()
         {
-            // Hacky fix for when DefDatabase isn't populated yet
-            List<FacePartStyleDef> allStyles = DefDatabase<FacePartStyleDef>.AllDefsListForReading;
-            if (allStyles.NullOrEmpty())
-            {
-                // Assign hardcoded Defs if the database isn't populated yet
-                eyeStyleDef = DefDatabase<FacePartStyleDef>.GetNamedSilentFail("Eye_Basic");
-                mouthStyleDef = DefDatabase<FacePartStyleDef>.GetNamedSilentFail("Mouth_Basic");
-                // If they still fail, the default texpaths are the final safe guards.
-                return;
-            }
-
             // Get lists of styles by face part type
-            List<FacePartStyleDef> eyeStyles = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s => s.renderNodeTag.defName == "FacePart_Eye").ToList();
+            List<FacePartStyleDef> eyeStyles = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s =>
+            {
+                if (s.renderNodeTag.defName != "FacePart_Eye")
+                    return false;
+
+                if (s.requiredGender != null)
+                {
+                    if (s.requiredGender != (byte)pawn.gender)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+
+            }).ToList();
             List<FacePartStyleDef> mouthStyles = DefDatabase<FacePartStyleDef>.AllDefsListForReading.Where(s =>
             {
+                if (s.renderNodeTag.defName != "FacePart_Mouth")
+                    return false;
+
                 if (s.requiredGender != null)
                 {
                     if (s.requiredGender != (byte)pawn.gender)
@@ -320,6 +326,14 @@ namespace Despicable
             // Render using animation first, conditional second, style last
             foreach (FacePartDef facePartDef in DefDatabase<FacePartDef>.AllDefsListForReading.ToList())
             {
+                switch (facePartDef.properties.debugLabel)
+                {
+                    case "FacePart_Eye_L":
+                    case "FacePart_Eye_R":
+                        facePartDef.properties.texPath = FacePartsUtil.GetEyePath(pawn, facePartDef.properties.texPath);
+                        break;
+                }
+
                 try
                 {
                     PawnRenderNodeProperties facePartProps = facePartDef.properties;
