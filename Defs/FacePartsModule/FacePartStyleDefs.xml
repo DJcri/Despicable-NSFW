@@ -52,7 +52,7 @@
 	</Despicable.FacePartStyleDef>
 	<!-- Mouths -->
 	<Despicable.FacePartStyleDef>
-		<defName>Mouth_Standard</defName>
+		<defName>Mouth_Basic</defName>
 		<label>Standard</label>
 		<renderNodeTag>FacePart_Mouth</renderNodeTag>
 		<texPath>FaceParts/Mouths/mouth_neutral</texPath>

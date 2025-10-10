@@ -193,5 +193,21 @@ namespace Despicable
                 comp?.TryInitActions();
             });
         }
+
+        public static string GetEyePath(Pawn pawn, string shortPath)
+        {
+            if (shortPath.NullOrEmpty())
+                return string.Empty;
+
+            // If path begins with "Gendered/" find the gendered texture
+            if (shortPath.StartsWith("Gendered/"))
+            {
+                CompFaceParts compFaceParts = pawn.TryGetComp<CompFaceParts>();
+                return $"FaceParts/Eyes/{shortPath.ReplaceFirst("Gendered/", compFaceParts?.genderPath ?? CompFaceParts.DEFAULT_GENDER_PATH)}";
+            }
+
+            // Else, short path is the full path by default, so return it
+            return shortPath;
+        }
     }
 }
