@@ -294,7 +294,7 @@ namespace Despicable
         public override List<PawnRenderNode> CompRenderNodes()
         {
             // Assign styles if not already assigned
-            if (ticks > 0 && (mouthStyleDef == null || eyeStyleDef == null))
+            if (mouthStyleDef == null || eyeStyleDef == null)
                 AssignStylesRandomByWeight();
 
             List<PawnRenderNode> facePartNodes = new List<PawnRenderNode>();
