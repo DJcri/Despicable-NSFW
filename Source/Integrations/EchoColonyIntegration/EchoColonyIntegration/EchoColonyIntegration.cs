@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
@@ -132,11 +133,10 @@ namespace Despicable
             {
                 // Extracts the JSON object from the response.
                 JSONNode relationshipData = JsonHelper.ExtractSubJsonFromResponse(json);
-                if (relationshipData == null || relationshipData["label"] == null || relationshipData["relationshipChange"] == null || relationshipData["moodEffect"] == null)
-                {
+                if (relationshipData == null || relationshipData["label"].IsNull || relationshipData["relationshipChange"].IsNull || relationshipData["moodEffect"].IsNull)
                     // If JSON is invalid or incomplete, let the original method handle the response.
                     return true;
-                }
+
                 CommonUtil.DebugLog("[Despicable] - Found relationship data, applying changes");
                 string interactionLabel = relationshipData["label"].Value;
                 string moodEffect = relationshipData["moodEffect"].Value;
@@ -210,33 +210,88 @@ namespace Despicable
             return true;
         }
 
-        // Patch for "TryInteractWith" to ignore checking for certain conditions if called from this mod.
         [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
-        public static class TryInteractWith_NamespaceCheck_Patch
+        public static class Pawn_InteractionsTracker_TryInteractWith_Patch
         {
-            public static bool Prefix(Pawn recipient, InteractionDef intDef, ref bool __result)
+            // Method that checks the call stack to see if the interaction is initiated by our mod.
+            public static bool ShouldBypassChecks()
             {
-                StackTrace stackTrace = new StackTrace();
+                var stackTrace = new StackTrace();
 
-                for (int i = 1; i < stackTrace.FrameCount; i++)
+                for (var i = 1; i < stackTrace.FrameCount; i++)
                 {
-                    StackFrame frame = stackTrace.GetFrame(i);
-                    MethodBase callingMethod = frame.GetMethod();
+                    var frame = stackTrace.GetFrame(i);
+                    MethodBase method = frame?.GetMethod();
+                    string callingNamespace = method?.DeclaringType?.Namespace;
 
-                    Type callingType = callingMethod?.DeclaringType;
-
-                    if (callingType != null)
+                    if (callingNamespace == "Despicable")
                     {
-                        if (callingType.FullName.StartsWith("Despicable", StringComparison.Ordinal))
-                        {
-                            CommonUtil.DebugLog("[Despicable] - Detected call to TryInteractWith from Despicable mod, bypassing checks.");
-                            __result = true;
-                            return false;
-                        }
+                        return true;
                     }
                 }
 
-                return true;
+                return false;
+            }
+
+            // Gemini patch that bypasses interaction checks if called from our mod.
+            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+            {
+                var codeMatcher = new CodeMatcher(instructions, il);
+
+                // --- PATCH 1: 'CanInteractNowWith' ---
+                codeMatcher.MatchStartForward(
+                    new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.CanInteractNowWith)))
+                );
+
+                // This label points to the code that runs AFTER the 'return false' block.
+                // We need it so our new check can also jump to the right place.
+                var jumpTargetLabel = codeMatcher.InstructionAt(1).operand;
+
+                // Insert our new check BEFORE the original check.
+                codeMatcher.Insert(
+                    // Call our helper method.
+                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Pawn_InteractionsTracker_TryInteractWith_Patch), nameof(ShouldBypassChecks))),
+                    // If it returns true, jump over the original check entirely.
+                    new CodeInstruction(OpCodes.Brtrue_S, jumpTargetLabel)
+                );
+
+
+                // --- PATCH 2: 'InteractedTooRecentlyToInteract' ---
+                codeMatcher.MatchStartForward(
+                    new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.InteractedTooRecentlyToInteract)))
+                );
+
+                var secondJumpTargetLabel = codeMatcher.InstructionAt(1).operand;
+
+                // Find the start of the whole 'if' block to insert our check at the beginning.
+                codeMatcher.MatchStartBackwards(
+                    new CodeMatch(OpCodes.Ldarg_2) // ldarg.2 loads 'intDef' onto the stack
+                );
+
+                // Insert our new check.
+                codeMatcher.Insert(
+                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Pawn_InteractionsTracker_TryInteractWith_Patch), nameof(ShouldBypassChecks))),
+                    // This time, the original code jumps if the condition is FALSE, so we need to find the correct label
+                    // that skips the entire 'if' block. We can find this by looking where the first part of the '&&' check jumps to.
+                    new CodeInstruction(OpCodes.Brtrue_S, FindTimeCheckJumpTarget(instructions))
+                );
+
+
+                return codeMatcher.InstructionEnumeration();
+            }
+
+            /// <summary>
+            /// Helper to find the correct jump target for the time check block.
+            /// The original code jumps over the InteractedTooRecentlyToInteract() call if ignoreTimeSinceLastInteraction is true.
+            /// We want to jump to that same spot if our bypass is true.
+            /// </summary>
+            private static object FindTimeCheckJumpTarget(IEnumerable<CodeInstruction> instructions)
+            {
+                var matcher = new CodeMatcher(instructions);
+                matcher.MatchStartForward(
+                    new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(InteractionDef), nameof(InteractionDef.ignoreTimeSinceLastInteraction)))
+                );
+                return matcher.InstructionAt(1).operand; // This is the Brtrue.s instruction
             }
         }
 
