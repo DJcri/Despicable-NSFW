@@ -1,4 +1,5 @@
-﻿using RimWorld;
+﻿using Despicable;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,20 @@ namespace EchoColonyIntegration
                 if (pawnInteractingWith.Faction != Faction.OfPlayer)
                 {
                     RecruitUtility.Recruit(pawnInteractingWith, heroPawn.Faction, heroPawn);
+
+                    // Notify the player of the successful recruitment
+                    string label = "LetterLabelPawnConvincedToJoin".Translate();
+                    string text = "LetterPawnConvincedToJoin".Translate(pawnInteractingWith.LabelShort, heroPawn.LabelShort)
+                                  .CapitalizeFirst() + ".";
+
+                    Letter letter = LetterMaker.MakeLetter(
+                        label,
+                        text,
+                        LetterDefOf.PositiveEvent,
+                        pawnInteractingWith // Target the recruited pawn for the map view/jump
+                    );
+
+                    Find.LetterStack.ReceiveLetter(letter);
                 }
             }
         }
@@ -40,32 +55,22 @@ namespace EchoColonyIntegration
                     Map map = heroPawn.Map;
                     if (map != null)
                     {
-                        EndRaid(map);
+                        CommonUtil.EndRaid(map);
+
+                        // Notify the player of the successful negotiation
+                        string label = "LetterLabelRaidAverted".Translate();
+                        string text = "LetterRaidAverted".Translate(pawnInteractingWith.LabelShort, heroPawn.LabelShort)
+                                      .CapitalizeFirst() + ".";
+
+                        Letter letter = LetterMaker.MakeLetter(
+                            label,
+                            text,
+                            LetterDefOf.PositiveEvent,
+                            pawnInteractingWith // Target the recruited pawn for the map view/jump
+                        );
+
+                        Find.LetterStack.ReceiveLetter(letter);
                     }
-                }
-            }
-        }
-
-        // Helper function to end an ongoing raid on the map
-        public static void EndRaid(Map map)
-        {
-            // Iterate through all Lord groups on the map
-            foreach (Lord lord in map.lordManager.lords.ToList())
-            {
-                // Check if the Lord's job is a hostile one (like a raid or siege)
-                // This is the most important part: identifying the hostile Lords.
-                if (lord.LordJob is LordJob_AssaultColony ||
-                    lord.LordJob is LordJob_Siege ||
-                    lord.LordJob is LordJob_DefendBase) // Include other raid types if necessary
-                {
-                    // Forcing the lord to end will either cause the enemies to flee,
-                    // or sometimes result in a game-defined "raid victory" condition.
-                    // LordToil_AssaultColony.ForceFinished() is another, sometimes cleaner, option
-                    // but simply removing the lord usually works.
-
-                    // Use lord.Cleanup() to remove the lord from the manager.
-                    // This usually triggers the appropriate LordJob exit logic (e.g., fleeing).
-                    lord.Cleanup();
                 }
             }
         }

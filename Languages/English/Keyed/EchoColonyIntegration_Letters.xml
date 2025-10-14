@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LanguageData>
+	<!-- Successful recruitment -->
+	<LetterLabelPawnConvincedToJoin>New recruit</LetterLabelPawnConvincedToJoin>
+	<LetterPawnConvincedToJoin>{0} was convinced to join by {1}</LetterPawnConvincedToJoin>
+	<!-- Successful raid negotiation -->
+	<LetterLabelRaidAverted>Raid averted</LetterLabelRaidAverted>
+	<LetterRaidAverted>{1} convinced {0} to retreat</LetterRaidAverted>
+</LanguageData>

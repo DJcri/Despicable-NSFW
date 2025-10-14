@@ -82,7 +82,10 @@ namespace Despicable
                     int roll = Rand.Range(0, 99);
 
                     if (roll < HeroUtil.fearMongerChance)
-                        pawn.GetLord().GotoToil(new LordToil_ExitMapFighting());
+                    {
+                        CommonUtil.EndRaid(pawn.Map);
+                        //pawn.GetLord().GotoToil(new LordToil_ExitMapFighting());
+                    }
                 }
             }
 

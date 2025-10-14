@@ -57,7 +57,7 @@ namespace Despicable
 
             float eyeOffset = 0.13f;
             if (headType.eyeOffsetEastWest.HasValue)
-                eyeOffset = headType.eyeOffsetEastWest.Value.x;
+                eyeOffset = headType?.eyeOffsetEastWest.Value.x ?? eyeOffset;
 
             Vector3 side = Vector3.zero;
             if (parms.facing == Rot4.East)

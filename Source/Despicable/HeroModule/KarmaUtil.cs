@@ -76,9 +76,14 @@ namespace Despicable
         {
             Dictionary<string, int> deedCountValues = heroComp.deedCountValues;
             float result = heroComp.karma / KarmaUtil.Modifier;
+            Pawn pawn = heroComp.pawn;
 
             if (deedCountValues.NullOrEmpty())
                 return;
+            if (!heroComp.isHero)
+                return;
+            else
+                RemoveKarmaicAbilities(pawn);
 
             foreach (var key in deedCountValues.Keys)
             {
@@ -100,7 +105,6 @@ namespace Despicable
             heroComp.karma = result;
 
             // Add commandable abilities
-            Pawn pawn = heroComp.pawn;
             List<AbilityDef> commandAbilities = DefDatabase<AbilityDef>.AllDefsListForReading.Where(x => {
                 if (x.comps.Count > 0)
                 {
@@ -122,13 +126,18 @@ namespace Despicable
             }
             else
             {
-                // Remove all karmaic abilities if hero module is disabled
-                foreach (var ability in pawn.abilities.AllAbilitiesForReading.ToList())
+                RemoveKarmaicAbilities(pawn);
+            }
+        }
+
+        // Function to remove all karmaic abilities from a pawn
+        public static void RemoveKarmaicAbilities(Pawn pawn)
+        {
+            foreach (var ability in pawn.abilities.AllAbilitiesForReading.ToList())
+            {
+                if (ability.def.comps[0].GetType() == typeof(CompProperties_AbilityKarmaic))
                 {
-                    if (ability.def.comps[0].GetType() == typeof(CompProperties_AbilityKarmaic))
-                    {
-                        pawn.abilities.RemoveAbility(ability.def);
-                    }
+                    pawn.abilities.RemoveAbility(ability.def);
                 }
             }
         }
