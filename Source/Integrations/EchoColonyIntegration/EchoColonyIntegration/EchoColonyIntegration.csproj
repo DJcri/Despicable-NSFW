@@ -54,6 +54,7 @@
     <Compile Include="InteractionWorkers\InteractionWorker_RomanceAttempt.cs" />
     <Compile Include="JsonHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecialInteractionUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Krafs.Rimworld.Ref">

@@ -1,4 +1,5 @@
 ﻿using EchoColony;
+using EchoColonyIntegration;
 using HarmonyLib;
 using RimWorld;
 using SimpleJSON;
@@ -61,6 +62,7 @@ namespace Despicable
                 stringBuilder.AppendLine("- \"relationshipChange\": An integer from -100 to 100.");
                 stringBuilder.AppendLine("- \"moodEffect\": A string from a predefined list.");
                 stringBuilder.AppendLine("- \"label\": A string from a predefined list.");
+                stringBuilder.AppendLine("- \"success\": A bool that describes whether the player was successful in negotiating, flirting, convincing etc.");
                 stringBuilder.AppendLine("The predefined list for moodEffect is: \"Tense\", \"Neutral\", \"Hopeful\", \"Jubilant\".");
                 stringBuilder.AppendLine("The predefined list for label is: \"Chitchat\", \"DeepTalk\", \"Insult\", \"Slight\", \"KindWords\", \"RomanceAttempt\", \"Breakup\", \"MarriageProposal\".");
                 stringBuilder.AppendLine("Example response:");
@@ -98,6 +100,36 @@ namespace Despicable
             {
                 Log.Error("[Despicable] - Error patching chat window constructor: " + ex.Message);
             }
+        }
+    }
+
+    // Allows user to interact with pawns that are not player controlled colonists.
+    [HarmonyLib.HarmonyPatch(typeof(Patch_ChatGizmo), "IsValidChatPawn")]
+    public static class HarmonyPatch_ChatGizmo_Patch
+    {
+        // Prefix method to override the original method
+        public static bool Prefix(ref bool __result, Pawn pawn)
+        {
+            __result = true;
+
+            try
+            {
+                if (pawn == null)
+                    __result = false;
+                if (pawn.Dead)
+                    __result = false;
+                if (pawn.Destroyed)
+                    __result = false;
+                if (!pawn.RaceProps.Humanlike)
+                    __result = false;
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("[Despicable x EchoColony] - Error validando pawn " + pawn?.LabelShort + ": " + ex.Message);
+                __result = false;
+            }
+
+            return false;
         }
     }
 
@@ -141,6 +173,7 @@ namespace Despicable
                 string interactionLabel = relationshipData["label"].Value;
                 string moodEffect = relationshipData["moodEffect"].Value;
                 int relationshipChange = relationshipData["relationshipChange"].AsInt;
+                bool success = relationshipData["success"].AsBool;
                 CommonUtil.DebugLog($"[Despicable] - label: {interactionLabel}, mood: {moodEffect}, opinion: {relationshipChange}");
 
                 // Adjusts custom interaction labels for this mod's custom interactions.
@@ -168,29 +201,44 @@ namespace Despicable
                             }
                         }
                     }
-                }
 
-                // Ensures romance and marriage attempts succeed or fail based on the AI's relationship change value.
-                if (interactionDef.Worker is InteractionWorker_RomanceAttempt romanceWorker)
-                {
-                    if (relationshipChange > 0)
+                    // Ensures romance and marriage attempts succeed or fail based on the AI's relationship change value.
+                    if (interactionDef.Worker is InteractionWorker_RomanceAttempt romanceWorker)
                     {
-                        romanceWorker.BaseSuccessChance = 1f;
+                        if (relationshipChange > 0)
+                        {
+                            romanceWorker.BaseSuccessChance = 1f;
+                        }
+                        else
+                        {
+                            romanceWorker.BaseSuccessChance = -1f;
+                        }
                     }
-                    else
+                    if (interactionDef.Worker is InteractionWorker_MarriageProposal marriageWorker)
                     {
-                        romanceWorker.BaseSuccessChance = -1f;
+                        if (relationshipChange > 0)
+                        {
+                            marriageWorker.BaseAcceptanceChance = 1f;
+                        }
+                        else
+                        {
+                            marriageWorker.BaseAcceptanceChance = -1f;
+                        }
                     }
                 }
-                if (interactionDef.Worker is InteractionWorker_MarriageProposal marriageWorker)
+                else /// Use special interaction utility if applicable
                 {
-                    if (relationshipChange > 0)
+                    switch (interactionLabel)
                     {
-                        marriageWorker.BaseAcceptanceChance = 1f;
-                    }
-                    else
-                    {
-                        marriageWorker.BaseAcceptanceChance = -1f;
+                        case "RecruitmentAttempt":
+                            SpecialInteractionUtility.HandleRecruitmentAttempt(heroPawn, pawnInteractingWith, success);
+                            break;
+                        case "ConvinceToEndRaidAttempt":
+                            SpecialInteractionUtility.HandleConvinceToEndRaidAttempt(heroPawn, pawnInteractingWith, success);
+                            break;
+                        default:
+                            Log.Warning("[Despicable x EchoColony] - No special interaction found for label: " + interactionLabel);
+                            return true;
                     }
                 }
 
@@ -210,91 +258,6 @@ namespace Despicable
             return true;
         }
 
-        [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
-        public static class Pawn_InteractionsTracker_TryInteractWith_Patch
-        {
-            // Method that checks the call stack to see if the interaction is initiated by our mod.
-            public static bool ShouldBypassChecks()
-            {
-                var stackTrace = new StackTrace();
-
-                for (var i = 1; i < stackTrace.FrameCount; i++)
-                {
-                    var frame = stackTrace.GetFrame(i);
-                    MethodBase method = frame?.GetMethod();
-                    string callingNamespace = method?.DeclaringType?.Namespace;
-
-                    if (callingNamespace == "Despicable")
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            // Gemini patch that bypasses interaction checks if called from our mod.
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
-            {
-                var codeMatcher = new CodeMatcher(instructions, il);
-
-                // --- PATCH 1: 'CanInteractNowWith' ---
-                codeMatcher.MatchStartForward(
-                    new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.CanInteractNowWith)))
-                );
-
-                // This label points to the code that runs AFTER the 'return false' block.
-                // We need it so our new check can also jump to the right place.
-                var jumpTargetLabel = codeMatcher.InstructionAt(1).operand;
-
-                // Insert our new check BEFORE the original check.
-                codeMatcher.Insert(
-                    // Call our helper method.
-                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Pawn_InteractionsTracker_TryInteractWith_Patch), nameof(ShouldBypassChecks))),
-                    // If it returns true, jump over the original check entirely.
-                    new CodeInstruction(OpCodes.Brtrue_S, jumpTargetLabel)
-                );
-
-
-                // --- PATCH 2: 'InteractedTooRecentlyToInteract' ---
-                codeMatcher.MatchStartForward(
-                    new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.InteractedTooRecentlyToInteract)))
-                );
-
-                var secondJumpTargetLabel = codeMatcher.InstructionAt(1).operand;
-
-                // Find the start of the whole 'if' block to insert our check at the beginning.
-                codeMatcher.MatchStartBackwards(
-                    new CodeMatch(OpCodes.Ldarg_2) // ldarg.2 loads 'intDef' onto the stack
-                );
-
-                // Insert our new check.
-                codeMatcher.Insert(
-                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Pawn_InteractionsTracker_TryInteractWith_Patch), nameof(ShouldBypassChecks))),
-                    // This time, the original code jumps if the condition is FALSE, so we need to find the correct label
-                    // that skips the entire 'if' block. We can find this by looking where the first part of the '&&' check jumps to.
-                    new CodeInstruction(OpCodes.Brtrue_S, FindTimeCheckJumpTarget(instructions))
-                );
-
-
-                return codeMatcher.InstructionEnumeration();
-            }
-
-            /// <summary>
-            /// Helper to find the correct jump target for the time check block.
-            /// The original code jumps over the InteractedTooRecentlyToInteract() call if ignoreTimeSinceLastInteraction is true.
-            /// We want to jump to that same spot if our bypass is true.
-            /// </summary>
-            private static object FindTimeCheckJumpTarget(IEnumerable<CodeInstruction> instructions)
-            {
-                var matcher = new CodeMatcher(instructions);
-                matcher.MatchStartForward(
-                    new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(InteractionDef), nameof(InteractionDef.ignoreTimeSinceLastInteraction)))
-                );
-                return matcher.InstructionAt(1).operand; // This is the Brtrue.s instruction
-            }
-        }
-
         // Utility method to extract just the dialogue from the AI's full response.
         public static string CleanDialogue(string fullResponse)
         {
@@ -304,6 +267,91 @@ namespace Despicable
                 return fullResponse.Substring(0, jsonStartIndex).Trim();
             }
             return fullResponse.Trim();
+        }
+    }
+
+    [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
+    public static class Pawn_InteractionsTracker_TryInteractWith_Patch
+    {
+        // Method that checks the call stack to see if the interaction is initiated by our mod.
+        public static bool ShouldBypassChecks()
+        {
+            var stackTrace = new StackTrace();
+
+            for (var i = 1; i < stackTrace.FrameCount; i++)
+            {
+                var frame = stackTrace.GetFrame(i);
+                MethodBase method = frame?.GetMethod();
+                string callingNamespace = method?.DeclaringType?.Namespace;
+
+                if (callingNamespace == "Despicable")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        // Gemini patch that bypasses interaction checks if called from our mod.
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+        {
+            var codeMatcher = new CodeMatcher(instructions, il);
+
+            // --- PATCH 1: 'CanInteractNowWith' ---
+            codeMatcher.MatchStartForward(
+                new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.CanInteractNowWith)))
+            );
+
+            // This label points to the code that runs AFTER the 'return false' block.
+            // We need it so our new check can also jump to the right place.
+            var jumpTargetLabel = codeMatcher.InstructionAt(1).operand;
+
+            // Insert our new check BEFORE the original check.
+            codeMatcher.Insert(
+                // Call our helper method.
+                new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Pawn_InteractionsTracker_TryInteractWith_Patch), nameof(ShouldBypassChecks))),
+                // If it returns true, jump over the original check entirely.
+                new CodeInstruction(OpCodes.Brtrue_S, jumpTargetLabel)
+            );
+
+
+            // --- PATCH 2: 'InteractedTooRecentlyToInteract' ---
+            codeMatcher.MatchStartForward(
+                new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.InteractedTooRecentlyToInteract)))
+            );
+
+            var secondJumpTargetLabel = codeMatcher.InstructionAt(1).operand;
+
+            // Find the start of the whole 'if' block to insert our check at the beginning.
+            codeMatcher.MatchStartBackwards(
+                new CodeMatch(OpCodes.Ldarg_2) // ldarg.2 loads 'intDef' onto the stack
+            );
+
+            // Insert our new check.
+            codeMatcher.Insert(
+                new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Pawn_InteractionsTracker_TryInteractWith_Patch), nameof(ShouldBypassChecks))),
+                // This time, the original code jumps if the condition is FALSE, so we need to find the correct label
+                // that skips the entire 'if' block. We can find this by looking where the first part of the '&&' check jumps to.
+                new CodeInstruction(OpCodes.Brtrue_S, FindTimeCheckJumpTarget(instructions))
+            );
+
+
+            return codeMatcher.InstructionEnumeration();
+        }
+
+        /// <summary>
+        /// Helper to find the correct jump target for the time check block.
+        /// The original code jumps over the InteractedTooRecentlyToInteract() call if ignoreTimeSinceLastInteraction is true.
+        /// We want to jump to that same spot if our bypass is true.
+        /// </summary>
+        private static object FindTimeCheckJumpTarget(IEnumerable<CodeInstruction> instructions)
+        {
+            var matcher = new CodeMatcher(instructions);
+            matcher.MatchStartForward(
+                new CodeMatch(OpCodes.Ldfld, AccessTools.Field(typeof(InteractionDef), nameof(InteractionDef.ignoreTimeSinceLastInteraction)))
+            );
+            return matcher.InstructionAt(1).operand; // This is the Brtrue.s instruction
         }
     }
 }
