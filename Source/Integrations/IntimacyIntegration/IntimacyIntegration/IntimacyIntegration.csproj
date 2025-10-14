@@ -63,6 +63,10 @@
   <ItemGroup>
     <Compile Include="IntimacyIntegration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelfReliefAddon\JobDriver_SelfRelief-v2.cs" />
+    <Compile Include="SelfReliefAddon\SelfReliefSettings-v2.cs" />
+    <Compile Include="SelfReliefAddon\SelfReliefUtility-v2.cs" />
+    <Compile Include="SelfReliefAddon\WorkGiver_SelfRelief-v2.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

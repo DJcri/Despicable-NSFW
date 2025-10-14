@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <!-- Job and work descriptions -->
+  <SelfRelief_JobDescription>Seeking self-relief to manage lovin needs</SelfRelief_JobDescription>
+  <SelfCare_WorkTypeLabel>Self-care</SelfCare_WorkTypeLabel>
+  <SelfCare_WorkTypeDescription>Personal maintenance activities to manage intimate needs when no partner is available</SelfCare_WorkTypeDescription>
+  
+  <!-- Thought descriptions -->
+  <SelfRelief_SatisfiedLabel>Self-relief satisfaction</SelfRelief_SatisfiedLabel>
+  <SelfRelief_SatisfiedDescription>I took care of my own needs. It helps with the urges, though it's not the same as being with someone.</SelfRelief_SatisfiedDescription>
+  
+  <!-- Hediff descriptions -->
+  <SelfRelief_StatusLabel>Self-relief status</SelfRelief_StatusLabel>
+  <SelfRelief_StatusDescription>Recently engaged in self-relief. This helps manage physical needs but doesn't replace genuine intimacy.</SelfRelief_StatusDescription>
+  
+  <SelfRelief_LovinNeedModifierLabel>Lovin need relief</SelfRelief_LovinNeedModifierLabel>
+  <SelfRelief_LovinNeedModifierDescription>Self-relief has temporarily reduced the urgency of lovin needs.</SelfRelief_LovinNeedModifierDescription>
+  
+  <!-- Work giver label -->
+  <WorkGiver_SelfReliefLabel>Seek self-relief</WorkGiver_SelfReliefLabel>
+  
+  <!-- Messages and notifications -->
+  <SelfRelief_CompletedMessage>{0} found some personal relief.</SelfRelief_CompletedMessage>
+  <SelfRelief_InterruptedMessage>{0} was interrupted while seeking relief.</SelfRelief_InterruptedMessage>
+  
+  <!-- Settings and mod info -->
+  <SelfRelief_ModName>Self-Relief Add-on</SelfRelief_ModName>
+  <SelfRelief_ModDescription>Adds self-relief mechanics that work like lovin but without a partner. Helps lonely pawns cope with their intimate needs while preserving the original lovin system.</SelfRelief_ModDescription>
+  
+  <!-- Integration messages -->
+  <SelfRelief_IntimacyIntegration>Integrating with Intimacy mod...</SelfRelief_IntimacyIntegration>
+  <SelfRelief_DespicableIntegration>Integrating with Despicable-NSFW mod...</SelfRelief_DespicableIntegration>
+  
+  <!-- Settings labels -->
+  <SelfRelief_LovinThresholdSetting>Lovin Need Threshold</SelfRelief_LovinThresholdSetting>
+  <SelfRelief_LovinThresholdDesc>Pawns will seek self-relief when their lovin need drops below this level</SelfRelief_LovinThresholdDesc>
+  
+  <SelfRelief_MaxEffectSetting>Maximum Effect Level</SelfRelief_MaxEffectSetting>
+  <SelfRelief_MaxEffectDesc>Self-relief will never raise lovin need above this level (recommended: 60%)</SelfRelief_MaxEffectDesc>
+</LanguageData>
