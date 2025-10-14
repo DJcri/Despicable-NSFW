@@ -1,101 +1,174 @@
-﻿using HarmonyLib;
+﻿using Despicable;
+using EchoColony;
+using HarmonyLib;
+using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using RimWorld;
+using System.Text;
 using Verse;
-using EchoColony;
 
 namespace EchoColonyIntegration
 {
+    /// <summary>
+    /// Revises the system prompt for AI chat to include detailed pawn information and balancing data.
+    /// </summary>
     [HarmonyPatch(typeof(ColonistPromptContextBuilder), "BuildSystemPrompt")]
     public static class HarmonyPatch_ReviseSystemPrompt
     {
+        /// <summary>
+        /// Custom mood effects the AI can use in its JSON response.
+        /// </summary>
+        private static readonly List<String> moodEffects = new List<string> {
+            "Tense",
+            "Neutral", // Added neutral back for completeness
+            "Hopeful",
+            "Jubilant"
+        };
+        /// <summary>
+        /// Custom interaction labels the AI can use in its JSON response.
+        /// </summary>
+        private static readonly List<String> interactionLabels = new List<string> {
+            "Chitchat",
+            "DeepTalk",
+            "Insult",
+            "Slight",
+            "KindWords",
+            "Flirt", // SI
+            "RomanceAttempt",
+            "Breakup",
+            "MarriageProposal",
+            "RecruitmentAttempt", // SI
+            "ConvinceToEndRaidAttempt" // SI
+        };
+
         [HarmonyPostfix]
         public static void Postfix(Pawn pawn, ref string __result)
         {
-            // 1. Get Pawn Info (Non-Redundant)
+            // --- 1. Get Pawn Info ---
             string fullName = pawn.Label;
             string genderLabel = pawn.gender.ToString();
-            string xenotypeLabel = pawn.genes?.Xenotype?.label ?? "baseline human";
-            string factionName = pawn.Faction?.Name ?? "wild pawn"; // Use pawn.Faction
-            string technologyLevel = pawn.Faction?.def?.techLevel.ToString() ?? "unknown tech level";
-            string settlementName = Find.CurrentMap.info?.parent?.LabelCap ?? "unknown settlement";
+            string xenotypeLabel = pawn.genes?.Xenotype?.LabelCap ?? "Baseline Human";
+            string factionName = pawn.Faction?.Name ?? "None (Wild Pawn)";
+            string technologyLevel = pawn.Faction?.def?.techLevel.ToString() ?? "Unknown";
+            string settlementName = Find.CurrentMap.info?.parent?.LabelCap ?? "Unknown Settlement";
 
-            // 2. Determine Alignment (Strict Hierarchy)
+            // --- 2. Determine Alignment (Strict Hierarchy) ---
             string alignmentLabel;
 
-            // Colony Status (Overrides Faction status)
+            // Colony Status (Most specific, takes highest priority)
             if (pawn.IsPrisonerOfColony)
             {
-                alignmentLabel = "prisoner";
+                alignmentLabel = "Prisoner";
             }
             else if (pawn.IsSlaveOfColony)
             {
-                alignmentLabel = "slave";
+                alignmentLabel = "Slave";
             }
             else if (pawn.Faction == Faction.OfPlayer)
             {
-                alignmentLabel = "colonist"; // Colony member (must be checked after prisoner/slave)
+                alignmentLabel = "Colonist";
             }
             // External Factions
             else if (pawn.Faction != null)
             {
                 if (pawn.Faction.HostileTo(Faction.OfPlayer))
                 {
-                    // More specific hostile faction check is generally cleaner for AI prompts
                     if (pawn.Faction == Faction.OfInsects)
                     {
-                        alignmentLabel = "enemy insectoid";
+                        alignmentLabel = "Enemy Insectoid";
                     }
                     else if (pawn.Faction == Faction.OfMechanoids)
                     {
-                        alignmentLabel = "enemy mechanoid";
+                        alignmentLabel = "Enemy Mechanoid";
                     }
                     else if (pawn.Faction == Faction.OfPirates)
                     {
-                        alignmentLabel = "pirate raider"; // Changed to be more descriptive
+                        alignmentLabel = "Pirate Raider";
                     }
                     else
                     {
-                        alignmentLabel = "hostile enemy"; // Generic hostile faction
+                        alignmentLabel = "Hostile Enemy"; // Generic hostile faction
                     }
                 }
                 else if (pawn.Faction.AllyOrNeutralTo(Faction.OfPlayer))
                 {
-                    // TradersGuild is just a specific kind of neutral/allied visitor
                     if (pawn.Faction == Faction.OfTradersGuild)
                     {
-                        alignmentLabel = "trader's guild member";
+                        alignmentLabel = "Trader's Guild Member";
                     }
                     else if (pawn.Faction == Faction.OfAncients)
                     {
-                        alignmentLabel = "ancient visitor";
+                        alignmentLabel = "Ancient Visitor";
                     }
                     else
                     {
-                        alignmentLabel = "visitor"; // Allied or neutral faction
+                        alignmentLabel = "Visitor"; // Allied or neutral faction
                     }
                 }
                 else
                 {
-                    alignmentLabel = "visitor"; // Unspecified or neutral faction
+                    alignmentLabel = "Visitor"; // Fallback for uncategorized external factions
                 }
             }
             // Wild or Unfactioned Pawn (Default fallback)
             else
             {
-                alignmentLabel = "solo traveler";
+                alignmentLabel = "Solo Traveler";
             }
 
-            // 3. Construct the Final Prompt
-            __result = $"You are {fullName}, a {technologyLevel} {alignmentLabel} in RimWorld.\n" +
-                       $"You identify as {genderLabel} (Xenotype: {xenotypeLabel}).\n" +
-                       $"You belong to the faction \"{factionName}\".\n" +
-                       $"You are currently in the {settlementName}.\n" +
-                       "**Speak from your perspective and stay in character**";
+            // --- 3. Construct the Cohesive System Prompt ---
+            StringBuilder stringBuilder = new StringBuilder();
+
+            // Set the character's base identity
+            stringBuilder.AppendLine($"**Pawn Identity:** You are {fullName}, a {technologyLevel} {alignmentLabel} in RimWorld.");
+            stringBuilder.AppendLine($"**Pawn Details:** Gender: {genderLabel} | Xenotype: {xenotypeLabel}.");
+            stringBuilder.AppendLine($"**Location & Affiliation:** Faction: \"{factionName}\" | Location: {settlementName}.");
+
+            // Append the original prompt result (the base game prompt), if it exists.
+            if (!string.IsNullOrEmpty(__result))
+            {
+                stringBuilder.AppendLine(Environment.NewLine + "--- Original Prompt Context ---");
+                stringBuilder.AppendLine(__result);
+                stringBuilder.AppendLine("-----------------------------");
+            }
+
+            // Core Instruction
+            stringBuilder.AppendLine(Environment.NewLine + "**CORE INSTRUCTION:** Speak only from your pawn's perspective and stay strictly in character.");
+            stringBuilder.AppendLine("Even when the chance of success is LOW, if the player's argument is exceptionally convincing and character-appropriate, mitigate the negative tone and reduce the severity of the 'relationshipChange' in the JSON, showing internal conflict instead of simple dismissal.");
+
+            // Append Hero Instructions and Response Format
+            Pawn heroPawn = HeroUtil.FindHero();
+            if (heroPawn != null && !heroPawn.Label.NullOrEmpty())
+            {
+                // VVVVVV INSERTION POINT FOR BALANCE LOGIC VVVVVV
+                // Calculate success instructions for all possible labels and insert them here.
+                string successInstruction = InteractionSuccessHelper.GetAllSuccessInstructions(heroPawn, pawn, interactionLabels);
+                stringBuilder.AppendLine(Environment.NewLine + "**BALANCE INSTRUCTION: ACTION PROBABILITIES**");
+                stringBuilder.AppendLine(successInstruction);
+                // ^^^^^^ END INSERTION POINT ^^^^^^
+
+                // Instruction to address the player's pawn directly
+                stringBuilder.AppendLine($"The player's self-insert pawn is named {heroPawn.Label}. Respond as if you are directly speaking to them.");
+
+                // Response Format Instructions
+                stringBuilder.AppendLine(Environment.NewLine + "--- AI RESPONSE FORMAT ---");
+                stringBuilder.AppendLine("**1. DIALOGUE:** The first part must be a simple, un-keyed string containing ONLY the character's response.");
+                stringBuilder.AppendLine("**2. JSON OBJECT:** The second part MUST be a single, valid JSON object on its own line immediately following the dialogue.");
+                stringBuilder.AppendLine("The JSON object MUST contain the following keys and follow these constraints:");
+                stringBuilder.AppendLine("- \"label\": A string from the predefined list: " + string.Join(", ", interactionLabels.Select(s => $"\"{s}\"")) + ".");
+                stringBuilder.AppendLine("- \"relationshipChange\": An integer value ranging from -100 to 100.");
+                stringBuilder.AppendLine("- \"moodEffect\": A string from the predefined list: " + string.Join(", ", moodEffects.Select(s => $"\"{s}\"")) + ".");
+                stringBuilder.AppendLine("- \"success\": A boolean (true or false) indicating the outcome of the player's interaction attempt (e.g., successful recruitment, insult, flirt).");
+                stringBuilder.AppendLine(Environment.NewLine + "Example Response:");
+                stringBuilder.AppendLine($"\"I've been thinking about your offer. It might be time for me to join your colony.\" *The raider sighs, looking defeated*");
+                stringBuilder.AppendLine("{\"label\": \"RecruitmentAttempt\", \"relationshipChange\": 20, \"moodEffect\": \"Hopeful\", \"success\": true}");
+            }
+
+            // Finalize the result
+            __result = stringBuilder.ToString();
         }
     }
 

@@ -108,24 +108,8 @@ namespace EchoColonyIntegration.Patches
                 }
                 else /// Use special interaction utility if applicable
                 {
-                    switch (interactionLabel)
-                    {
-                        case "RecruitmentAttempt":
-                            SpecialInteractionUtility.HandleRecruitmentAttempt(heroPawn, pawnInteractingWith, success);
-                            GUI.color = Color.green;
-                            CommonUtil.DebugLog("[Despicable x EchoColony] - Handled RecruitmentAttempt interaction.");
-                            GUI.color = Color.white;
-                            break;
-                        case "ConvinceToEndRaidAttempt":
-                            SpecialInteractionUtility.HandleConvinceToEndRaidAttempt(heroPawn, pawnInteractingWith, success);
-                            GUI.color = Color.green;
-                            CommonUtil.DebugLog("[Despicable x EchoColony] - Handled ConvinceToEndRaidAttempt interaction.");
-                            GUI.color = Color.white;
-                            break;
-                        default:
-                            Log.Warning("[Despicable x EchoColony] - No special interaction found for label: " + interactionLabel);
-                            return true;
-                    }
+                    CommonUtil.DebugLog("[Despicable x EchoColony] - InteractionDef not found, checking for special interaction handling...");
+                    InteractionUtil.HandleSpecialInteraction(heroPawn, pawnInteractingWith, interactionLabel, success);
                 }
 
                 // Applies a mood effect to the interacting pawn.
@@ -137,7 +121,7 @@ namespace EchoColonyIntegration.Patches
             }
             catch (Exception ex)
             {
-                Log.Error("[Despicable] - Error parsing Gemini reply JSON: " + ex.Message);
+                Log.Error("[Despicable x EchoColony] - Error parsing Gemini reply JSON: " + ex.Message);
             }
 
             // Returns true to allow the original method to run its course.
