@@ -20,7 +20,7 @@ namespace EchoColonyIntegration.Patches
         // Postfix method to clean the dialogue by removing the JSON part before displaying it.
         public static void Postfix(ref string __result)
         {
-            CommonUtil.DebugLog("[Despicable] - Attempting to clean dialogue for user...");
+            CommonUtil.DebugLog("[Despicable x EchoColony] - Attempting to clean dialogue for user...");
             __result = CleanDialogue(__result);
         }
 
@@ -31,16 +31,16 @@ namespace EchoColonyIntegration.Patches
                 return true;
 
             Pawn heroPawn = HeroUtil.FindHero();
-            CommonUtil.DebugLog("[Despicable] - Checking for hero pawn...");
+            CommonUtil.DebugLog("[Despicable x EchoColony] - Checking for hero pawn...");
             if (heroPawn == null)
                 return true;
 
             Pawn pawnInteractingWith = ((Thing)heroPawn).TryGetComp<CompHero>()?.pawnInteractingWith;
-            CommonUtil.DebugLog("[Despicable] - Checking for pawn being interacted with...");
+            CommonUtil.DebugLog("[Despicable x EchoColony] - Checking for pawn being interacted with...");
             if (pawnInteractingWith == null)
                 return true;
 
-            CommonUtil.DebugLog("[Despicable] - Looking for relationship data...");
+            CommonUtil.DebugLog("[Despicable x EchoColony] - Looking for relationship data...");
             try
             {
                 // Extracts the JSON object from the response.
@@ -49,12 +49,12 @@ namespace EchoColonyIntegration.Patches
                     // If JSON is invalid or incomplete, let the original method handle the response.
                     return true;
 
-                CommonUtil.DebugLog("[Despicable] - Found relationship data, applying changes");
+                CommonUtil.DebugLog("[Despicable x EchoColony] - Found relationship data, applying changes");
                 string interactionLabel = relationshipData["label"].Value;
                 string moodEffect = relationshipData["moodEffect"].Value;
                 int relationshipChange = relationshipData["relationshipChange"].AsInt;
                 bool success = relationshipData["success"].AsBool;
-                CommonUtil.DebugLog($"[Despicable] - label: {interactionLabel}, mood: {moodEffect}, opinion: {relationshipChange}, success: {success}");
+                CommonUtil.DebugLog($"[Despicable x EchoColony] - label: {interactionLabel}, mood: {moodEffect}, opinion: {relationshipChange}, success: {success}");
 
                 // Adjusts custom interaction labels for this mod's custom interactions.
                 if (interactionLabel == "RomanceAttempt" || interactionLabel == "MarriageProposal")
@@ -105,6 +105,9 @@ namespace EchoColonyIntegration.Patches
                             marriageWorker.BaseAcceptanceChance = -1f;
                         }
                     }
+
+                    // Triggers the actual social interaction in the game.
+                    heroPawn.interactions.TryInteractWith(pawnInteractingWith, interactionDef);
                 }
                 else /// Use special interaction utility if applicable
                 {
@@ -115,9 +118,6 @@ namespace EchoColonyIntegration.Patches
                 // Applies a mood effect to the interacting pawn.
                 ThoughtDef moodEffectDef = ThoughtDef.Named(moodEffect + "MoodEffect");
                 pawnInteractingWith?.needs?.mood?.thoughts?.memories?.TryGainMemory(moodEffectDef, heroPawn);
-
-                // Triggers the actual social interaction in the game.
-                heroPawn.interactions.TryInteractWith(pawnInteractingWith, interactionDef);
             }
             catch (Exception ex)
             {

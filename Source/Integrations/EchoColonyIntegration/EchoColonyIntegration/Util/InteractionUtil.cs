@@ -77,6 +77,16 @@ namespace EchoColonyIntegration
                     }
                     break;
 
+                case "SnapOutOfMentalBreakAttempt":
+                    // Handle an attempt to snap a pawn out of a mental break
+                    if (pawnInteractingWith.InMentalState)
+                    {
+                        pawnInteractingWith.mindState.mentalStateHandler.CurState.RecoverFromState();
+                        // Optionally notify the player of the successful intervention
+                        Messages.Message($"{heroPawn.LabelShort} has successfully helped {pawnInteractingWith.LabelShort} snap out of their mental break.", MessageTypeDefOf.PositiveEvent);
+                    }
+                    break;
+
                 // Add other special interactions here as you define them (e.g., "MarriageProposal", "Breakup")
 
                 default:

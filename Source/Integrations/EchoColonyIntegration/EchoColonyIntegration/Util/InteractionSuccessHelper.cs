@@ -31,23 +31,24 @@ namespace EchoColonyIntegration
             {
                 case "RecruitmentAttempt":
                 case "ConvinceToEndRaidAttempt":
-                case "MarriageProposal":
                     successChance *= 0.8f;
                     compositeAbility = heroPawn.GetStatValue(StatDefOf.NegotiationAbility);
                     break;
 
+                case "SnapOutOfMentalBreakAttempt":
+                case "MarriageProposal":
+                    successChance *= 0.8f;
+                    compositeAbility = heroPawn.GetStatValue(StatDefOf.SocialImpact);
+                    break;
+
                 case "Flirt":
                 case "RomanceAttempt":
-                    successChance *= 1.1f;
+                    successChance *= 0.9f;
                     compositeAbility = heroPawn.GetStatValue(StatDefOf.SocialImpact);
                     break;
 
                 case "Insult":
                 case "Slight":
-                    successChance *= 1.0f; // Neutral base, adjusted heavily by hostility later
-                    compositeAbility = heroPawn.GetStatValue(StatDefOf.SocialImpact);
-                    break;
-
                 case "Chitchat":
                 case "DeepTalk":
                 case "KindWords":

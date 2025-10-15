@@ -41,7 +41,8 @@ namespace EchoColonyIntegration
             "Breakup",
             "MarriageProposal",
             "RecruitmentAttempt", // SI
-            "ConvinceToEndRaidAttempt" // SI
+            "ConvinceToEndRaidAttempt", // SI
+            "SnapOutOfMentalBreakAttempt" // SI
         };
 
         [HarmonyPostfix]
