@@ -193,7 +193,7 @@ namespace Despicable
             {
                 option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Proselytize".Translate(targetPawn.Name.ToStringShort), delegate ()
                 {
-                    pawn.interactions.TryInteractWith(target.Pawn, HeroModule_InteractionDefOf.PepTalk);
+                    pawn.interactions.TryInteractWith(target.Pawn, HeroModule_InteractionDefOf.Proselytize);
                 }, MenuOptionPriority.High), pawn, target);
                 opts.Add(option);
             }
