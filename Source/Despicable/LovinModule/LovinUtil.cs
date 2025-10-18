@@ -1,10 +1,12 @@
-﻿using System;
+﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RimWorld;
 using Verse;
+using Verse.AI;
+using Verse.AI.Group;
 using static UnityEngine.GraphicsBuffer;
 
 namespace Despicable
@@ -78,18 +80,35 @@ namespace Despicable
             // If not humanlike
             if (!pawn.RaceProps?.Humanlike == true)
                 return false;
-            // If underage
-            if (!pawn.ageTracker?.Adult == true || (pawn.ageTracker?.AgeChronologicalYears < 18) || (pawn.ageTracker?.AgeBiologicalYears < 18))
-                return false;
             // If drafted
             if (pawn.Drafted)
                 return false;
             // If pawn is travelling or leaving
             if (pawn.mindState?.duty?.def == DutyDefOf.TravelOrLeave)
                 return false;
+            // If in an aggro mental state
+            if (pawn.InAggroMentalState)
+                return false;
             // Ignore these conditions if lovin' was ordered
             if (!orderedLovin && !CommonUtil.GetSettings().debugMode)
             {
+                // If doing a ritual job
+                string text = pawn.CurJob?.def?.defName?.ToLower() ?? string.Empty;
+                if (text.Contains("ritual") || text.Contains("ceremony") || text.Contains("speech") || text.Contains("wedding"))
+                    return false;
+                // If part of a ritual lord
+                if (pawn.GetLord()?.LordJob is LordJob_Ritual)
+                    return false;
+                // If doing doctor jobs
+                if (pawn.CurJob?.workGiverDef?.workType == WorkTypeDefOf.Doctor)
+                    return false;
+                // Firefighting jobs are urgent and should not be interrupted
+                if (pawn.CurJob?.workGiverDef?.workType == WorkTypeDefOf.Firefighter)
+                    return false;
+                // If doing a forced job
+                Job curJob = pawn.CurJob;
+                if (curJob != null && curJob.playerForced)
+                    return false;
                 // If pawn recently had lovin'
                 if (pawn.needs?.mood?.thoughts?.memories?.GetFirstMemoryOfDef(ThoughtDefOf.GotSomeLovin) != null)
                     return false;
@@ -207,6 +226,11 @@ namespace Despicable
             if (pawn == null)
                 return false;
 
+            // If underage
+            if (!pawn.ageTracker?.Adult == true || (pawn.ageTracker?.AgeChronologicalYears < 18) || (pawn.ageTracker?.AgeBiologicalYears < 18))
+                return false;
+
+            // Check health conditions
             if (pawn.health?.capacities?.CanBeAwake == true
                 && pawn.health?.hediffSet?.BleedRateTotal <= 0.0f
                 && pawn.health?.hediffSet?.PainTotal <= lovinMaxPainThreshold

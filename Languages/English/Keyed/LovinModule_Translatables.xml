@@ -2,6 +2,7 @@
 <LanguageData>
 	<!-- Interaction options -->
 	<InteractionCategory>Interact with {0}</InteractionCategory>
+	<InteractionNotAvailable>No social interactions available</InteractionNotAvailable>
 	<InteractionOption_SocialFight>Provoke {0}</InteractionOption_SocialFight>
 	<InteractionOption_Insult>Insult {0}'</InteractionOption_Insult>
 	<InteractionOption_Chat>Chat with {0}'</InteractionOption_Chat>

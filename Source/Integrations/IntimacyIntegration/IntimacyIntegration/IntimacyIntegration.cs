@@ -28,10 +28,10 @@ namespace Despicable
     public static class HarmonyPatch_LovinUtil
     {
         [HarmonyPostfix]
-        public static void Postfix(ref bool __result, ref Pawn pawn, ref Pawn target)
+        public static void Postfix(ref bool __result, ref Pawn pawn, ref Pawn target, ref bool ordered)
         {
             __result = true;
-            if (!SexUtilities.CanDoLovin(pawn) || !SexUtilities.CanDoLovin(target) || !SocialInteractionUtility.CanInitiateInteraction(pawn, (InteractionDef)null) || !CommonChecks.IsOldEnough(pawn) || !CommonChecks.IsOldEnough(target) || !CommonChecks.AreMutuallyAttracted(pawn, target) || CommonChecks.IdeologyForbidsLovin(pawn, target) || CommonChecks.IncestCheck(pawn, target))
+            if (!LovinUtil.CouldUseSomeLovin(pawn, ordered) || !LovinUtil.CouldUseSomeLovin(target, ordered) || !SocialInteractionUtility.CanInitiateInteraction(pawn, (InteractionDef)null) || !CommonChecks.IsOldEnough(pawn) || !CommonChecks.IsOldEnough(target) || !CommonChecks.AreMutuallyAttracted(pawn, target) || CommonChecks.IdeologyForbidsLovin(pawn, target) || CommonChecks.IncestCheck(pawn, target))
             {
                 __result = false;
             }
@@ -45,26 +45,26 @@ namespace Despicable
         [HarmonyPostfix]
         public static void Postfix(ref string __result, ref Pawn pawn, ref Pawn pawn2)
         {
-            __result = "[Intimacy] Pawn drafted or lovin' on cooldown";
+            __result = "Pawn is unavailable for lovin'";
             if (!SocialInteractionUtility.CanInitiateInteraction(pawn, null))
             {
-                __result = "[Intimacy] Pawn can't initiate interaction due to condition or sleeping";
+                __result = "Pawn can't be initiated right now";
             }
             if (!CommonChecks.IsOldEnough(pawn) || !CommonChecks.IsOldEnough(pawn2))
             {
-                __result = "[Intimacy] Pawn isn't old enough";
+                __result = "Pawn isn't old enough";
             }
             if (!CommonChecks.AreMutuallyAttracted(pawn, pawn2))
             {
-                __result = "[Intimacy] Pawn's aren't attracted to each other";
+                __result = "Pawn's aren't attracted to each other";
             }
             if (CommonChecks.IdeologyForbidsLovin(pawn, pawn2))
             {
-                __result = "[Intimacy] Ideology forbids lovin'";
+                __result = "Ideology forbids lovin'";
             }
             if (CommonChecks.IncestCheck(pawn, pawn2))
             {
-                __result = "[Intimacy] Incest not desired by these pawns";
+                __result = "Incest not desired by these pawns";
             }
         }
     }

@@ -94,26 +94,48 @@ namespace Despicable
 
             if (!pawn.HostileTo(target.Pawn))
             {
-                // Social fight
-                option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_SocialFight".Translate(targetPawn.Name.ToStringShort), delegate ()
-                {
-                    pawn.interactions.StartSocialFight(targetPawn);
-                }, MenuOptionPriority.High), pawn, target);
-                opts.Add(option);
+                // Use TryInteractWith's checks to see if interaction is possible
+                bool canInteract = pawn.interactions.CanInteractNowWith(targetPawn);
 
-                // Insult
-                option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Insult".Translate(targetPawn.Name.ToStringShort), delegate ()
+                if (canInteract)
                 {
-                    pawn.interactions.TryInteractWith(targetPawn, InteractionDefOf.Insult);
-                }, MenuOptionPriority.High), pawn, target);
-                opts.Add(option);
+                    // Social fight
+                    option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_SocialFight".Translate(targetPawn.Name.ToStringShort), delegate ()
+                    {
+                        pawn.interactions.StartSocialFight(targetPawn);
+                    }, MenuOptionPriority.High), pawn, target);
+                    opts.Add(option);
 
-                // Chat
-                option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Chat".Translate(targetPawn.Name.ToStringShort), delegate ()
+                    // Insult
+                    option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Insult".Translate(targetPawn.Name.ToStringShort), delegate ()
+                    {
+                        pawn.interactions.TryInteractWith(targetPawn, InteractionDefOf.Insult);
+                    }, MenuOptionPriority.High), pawn, target);
+                    opts.Add(option);
+
+                    // Chat
+                    option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Chat".Translate(targetPawn.Name.ToStringShort), delegate ()
+                    {
+                        pawn.interactions.TryInteractWith(targetPawn, InteractionDefOf.Chitchat);
+                    }, MenuOptionPriority.High), pawn, target);
+                    opts.Add(option);
+
+                    // Marriage proposal
+                    if (pawn.relations.DirectRelationExists(PawnRelationDefOf.Lover, targetPawn) || pawn.relations.DirectRelationExists(PawnRelationDefOf.Fiance, targetPawn))
+                    {
+                        option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Marriage".Translate(targetPawn.Name.ToStringShort), delegate ()
+                        {
+                            pawn.interactions.TryInteractWith(targetPawn, InteractionDefOf.MarriageProposal);
+                        }, MenuOptionPriority.High), pawn, target);
+                        opts.Add(option);
+                    }
+                }
+                else
                 {
-                    pawn.interactions.TryInteractWith(targetPawn, InteractionDefOf.Chitchat);
-                }, MenuOptionPriority.High), pawn, target);
-                opts.Add(option);
+                    // Create an option that says socialization isn't possible
+                    option = new FloatMenuOption("InteractionNotAvailable".Translate(), delegate () { });
+                }
+
 
                 // Add option to initiate lovin in bed or not
                 // Only add option if pawns are compatible
@@ -142,16 +164,6 @@ namespace Despicable
                         FloatMenuUtility.DecoratePrioritizedTask(option, pawn, target);
                         opts.Add(option);
                     }
-                }
-
-                // Marriage proposal
-                if (pawn.relations.DirectRelationExists(PawnRelationDefOf.Lover, targetPawn) || pawn.relations.DirectRelationExists(PawnRelationDefOf.Fiance, targetPawn))
-                {
-                    option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Marriage".Translate(targetPawn.Name.ToStringShort), delegate ()
-                    {
-                        pawn.interactions.TryInteractWith(targetPawn, InteractionDefOf.MarriageProposal);
-                    }, MenuOptionPriority.High), pawn, target);
-                    opts.Add(option);
                 }
 
                 CompHero heroComp = pawn.TryGetComp<CompHero>();
