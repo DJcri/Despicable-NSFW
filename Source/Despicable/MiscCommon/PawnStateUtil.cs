@@ -12,7 +12,7 @@ namespace Despicable
     {
         public static bool IsAsleep(Pawn pawn)
         {
-            if (pawn.InBed() && !LovinUtil.IsLovin(pawn))
+            if (pawn.CurJobDef == JobDefOf.LayDownResting && !LovinUtil.IsLovin(pawn))
                 return true;
             return false;
         }
