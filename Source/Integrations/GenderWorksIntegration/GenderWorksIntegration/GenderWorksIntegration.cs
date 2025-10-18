@@ -27,6 +27,14 @@ namespace Despicable
         {
             try
             {
+                if (pawn?.health?.hediffSet?.hediffs == null)
+                {
+                    // A little redundant, but GenderWorks' "HasMaleReproductiveOrgan" is missing a null check
+                    // Female check is fine
+                    __result = false;
+                    return;
+                }
+
                 bool num = GenderUtilities.HasMaleReproductiveOrgan(pawn);
                 bool flag = GenderUtilities.HasFemaleReproductiveOrgan(pawn);
                 if (num && otherGender == 1)

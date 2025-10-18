@@ -31,7 +31,7 @@ namespace Despicable
         public static void Postfix(ref bool __result, ref Pawn pawn, ref Pawn target, ref bool ordered)
         {
             __result = true;
-            if (!LovinUtil.CouldUseSomeLovin(pawn, ordered) || !LovinUtil.CouldUseSomeLovin(target, ordered) || !SocialInteractionUtility.CanInitiateInteraction(pawn, (InteractionDef)null) || !CommonChecks.IsOldEnough(pawn) || !CommonChecks.IsOldEnough(target) || !CommonChecks.AreMutuallyAttracted(pawn, target) || CommonChecks.IdeologyForbidsLovin(pawn, target) || CommonChecks.IncestCheck(pawn, target))
+            if (!LovinUtil.CouldUseSomeLovin(pawn, ordered) || !LovinUtil.CouldUseSomeLovin(target, ordered) || !SocialInteractionUtility.CanInitiateInteraction(pawn, null) || !CommonChecks.IsOldEnough(pawn) || !CommonChecks.IsOldEnough(target) || !CommonChecks.AreMutuallyAttracted(pawn, target) || CommonChecks.IdeologyForbidsLovin(pawn, target) || CommonChecks.IncestCheck(pawn, target))
             {
                 __result = false;
             }
@@ -48,7 +48,7 @@ namespace Despicable
             __result = "Pawn is unavailable for lovin'";
             if (!SocialInteractionUtility.CanInitiateInteraction(pawn, null))
             {
-                __result = "Pawn can't be initiated right now";
+                __result = "Lovin' can't be initiated right now";
             }
             if (!CommonChecks.IsOldEnough(pawn) || !CommonChecks.IsOldEnough(pawn2))
             {
