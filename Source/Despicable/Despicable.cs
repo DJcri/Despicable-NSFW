@@ -49,7 +49,7 @@ namespace Despicable
                 settings.facialPartsExtensionEnabled = false;
 
             harmony = new Harmony("com.DCSzar.Despicable");
-            harmony.PatchAllUncategorized();
+            harmony.PatchAll();
         }
 
         public override void DoSettingsWindowContents(Rect inRect)

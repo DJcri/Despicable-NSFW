@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RimWorld;
+using RimWorld.Planet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using RimWorld;
 using UnityEngine.Events;
 using Verse;
 using Verse.AI;
@@ -28,7 +29,10 @@ namespace Despicable
             get
             {
                 if (partnerPawn != null)
+                {
+                    partnerBed = partnerPawn.CurrentBed();
                     return partnerPawn;
+                }
                 else if (Target is Pawn)
                 {
                     LocalTargetInfo localTargetInfo = job.GetTarget(TargetIndex.A).Pawn;
@@ -62,14 +66,12 @@ namespace Despicable
         {
             get
             {
-                Building_Bed bed = pawn.CurrentBed();
-
                 if (partnerBed != null)
-                    bed = partnerBed;
+                    return partnerBed;
                 else if (job.GetTarget(TargetIndex.B).Thing is Building_Bed)
-                    bed = job.GetTarget(TargetIndex.B).Thing as Building_Bed;
-
-                return bed;
+                    return job.GetTarget(TargetIndex.B).Thing as Building_Bed;
+                else
+                    return null;
             }
         }
 
@@ -89,8 +91,8 @@ namespace Despicable
                     Partner.rotationTracker.FaceTarget(pawn);
 
                     // Stop partner's pathing
-                    Partner.pather.StopDead();
                     Partner.jobs.curDriver.asleep = false;
+                    Partner.pather.StopDead();
 
                     // ANIMATION
                     // Find animation group that fits the context
@@ -106,11 +108,15 @@ namespace Despicable
                         {
                             AnimGroupDef animGroupDef = playableAnimations.RandomElement();
                             Dictionary<string, Pawn> roleAssignments = ContextUtil.AssignRoles(animGroupDef, participants);
-
-                            Thing anchor = (Bed != null) ? (Thing)Bed : pawn;
                             // If no bed, play animation on initiator pawn's position
                             if (roleAssignments != null)
                             {
+                                Thing anchor = (partnerBed != null) ? (Thing)Bed : pawn;
+
+                                // Eject pawn from bed
+                                if (Partner.InBed())
+                                    Partner.jobs.posture = PawnPosture.Standing;
+
                                 AnimUtil.PlayAnimationGroup(animGroupDef, roleAssignments, anchor);
                             }
                         }
