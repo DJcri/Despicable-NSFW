@@ -62,12 +62,14 @@ namespace Despicable
         {
             get
             {
+                Building_Bed bed = pawn.CurrentBed();
+
                 if (partnerBed != null)
-                    return partnerBed;
+                    bed = partnerBed;
                 else if (job.GetTarget(TargetIndex.B).Thing is Building_Bed)
-                    return job.GetTarget(TargetIndex.B).Thing as Building_Bed;
-                else
-                    return null;
+                    bed = job.GetTarget(TargetIndex.B).Thing as Building_Bed;
+
+                return bed;
             }
         }
 
@@ -104,7 +106,8 @@ namespace Despicable
                         {
                             AnimGroupDef animGroupDef = playableAnimations.RandomElement();
                             Dictionary<string, Pawn> roleAssignments = ContextUtil.AssignRoles(animGroupDef, participants);
-                            Thing anchor = (partnerBed != null) ? (Thing)Bed : pawn;
+
+                            Thing anchor = (Bed != null) ? (Thing)Bed : pawn;
                             // If no bed, play animation on initiator pawn's position
                             if (roleAssignments != null)
                             {
