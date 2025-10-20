@@ -93,34 +93,6 @@ namespace Despicable
                     // Stop partner's pathing
                     Partner.jobs.curDriver.asleep = false;
                     Partner.pather.StopDead();
-
-                    // ANIMATION
-                    // Find animation group that fits the context
-                    participants.Clear();
-                    participants.AddDistinct(pawn);
-                    participants.AddDistinct(Partner);
-                    durationTicks = LovinUtil.defaultDurationTicks;
-                    if (CommonUtil.GetSettings().animationExtensionEnabled)
-                    {
-                        List<AnimGroupDef> playableAnimations = ContextUtil.GetPlayableAnimationsFor(participants, job.def.GetModExtension<ModExtension_LovinType>()?.lovinType);
-
-                        if (!playableAnimations.NullOrEmpty())
-                        {
-                            AnimGroupDef animGroupDef = playableAnimations.RandomElement();
-                            Dictionary<string, Pawn> roleAssignments = ContextUtil.AssignRoles(animGroupDef, participants);
-                            // If no bed, play animation on initiator pawn's position
-                            if (roleAssignments != null)
-                            {
-                                Thing anchor = (partnerBed != null) ? (Thing)Bed : pawn;
-
-                                // Eject pawn from bed
-                                if (Partner.InBed())
-                                    Partner.jobs.posture = PawnPosture.Standing;
-
-                                AnimUtil.PlayAnimationGroup(animGroupDef, roleAssignments, anchor);
-                            }
-                        }
-                    }
                 }
                 catch (Exception e)
                 {
@@ -143,14 +115,8 @@ namespace Despicable
                             FleckMaker.ThrowMetaIcon(participant.Position, participant.Map, FleckDefOf.Heart);
                     }
 
-                    // End once animations finish or reaches default duration
-                    CompExtendedAnimator animator = pawn.TryGetComp<CompExtendedAnimator>();
-                    if ((!(animator.animQueue.Count > 0) && !animator.hasAnimPlaying)
-                    || (!(animator.hasAnimPlaying) && durationTicks <= 0))
-                    {
-                        ReadyForNextToil();
-                    }
-                    else if (durationTicks <= 0)
+                    // End once reaches default duration
+                    if (durationTicks <= 0)
                     {
                         ReadyForNextToil();
                     }
@@ -164,9 +130,8 @@ namespace Despicable
             });
             lovinToil.AddFinishAction(delegate
             {
-                // Restart partner's pathing and animation
+                // Restart partner's pathing
                 Partner.pather.StartPath(Target, PathEndMode.OnCell);
-                AnimUtil.ResetAnimatorsForGroup(participants);
             });
             lovinToil.FailOn(() => !PartnerPresent(Partner));
 

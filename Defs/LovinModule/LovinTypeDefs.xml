@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 	<Despicable.LovinTypeDef>
-		<defName>Vaginal</defName>
-		<interaction>Interaction_VaginalSex</interaction>
+		<defName>FoolAround</defName>
+		<interaction>Interaction_FoolAround</interaction>
 		<requiresFemale>true</requiresFemale>
-		<requiresMale>true</requiresMale>
-	</Despicable.LovinTypeDef>
-	<Despicable.LovinTypeDef>
-		<defName>Blowjob</defName>
-		<interaction>Interaction_OralSex</interaction>
-		<requiresMale>true</requiresMale>
-	</Despicable.LovinTypeDef>
-	<Despicable.LovinTypeDef>
-		<defName>Cunnilingus</defName>
-		<interaction>Interaction_OralSex</interaction>
-		<requiresFemale>true</requiresFemale>
-	</Despicable.LovinTypeDef>
-	<Despicable.LovinTypeDef>
-		<defName>Anal</defName>
-		<interaction>Interaction_AnalSex</interaction>
 		<requiresMale>true</requiresMale>
 	</Despicable.LovinTypeDef>
 </Defs>

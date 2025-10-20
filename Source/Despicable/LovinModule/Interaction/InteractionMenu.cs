@@ -142,7 +142,7 @@ namespace Despicable
                 // if (LovinUtil.PassesLovinCheck(pawn, target.Pawn, true))
                 if (CommonUtil.GetSettings().lovinExtensionEnabled)
                 {
-                    if (LovinUtil.PassesLovinCheck(pawn, targetPawn, true) && !pawn.Drafted && !targetPawn.Drafted && pawn.TryGetComp<CompExtendedAnimator>() != null)
+                    if (LovinUtil.PassesLovinCheck(pawn, targetPawn, true) && !pawn.Drafted && !targetPawn.Drafted)
                     {
                         option = FloatMenuUtility.DecoratePrioritizedTask(new FloatMenuOption("InteractionOption_Lovin".Translate(targetPawn.Name.ToStringShort), delegate ()
                         {

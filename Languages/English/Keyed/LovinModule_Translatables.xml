@@ -9,8 +9,5 @@
 	<InteractionOption_Lovin>Do lovin' with {0}</InteractionOption_Lovin>
 	<InteractionOption_Marriage>Propose to {0}</InteractionOption_Marriage>
 	<!-- Sex options -->
-	<SexOptionVaginalLabel>Have vaginal sex with {0}</SexOptionVaginalLabel>
-	<SexOptionBlowjobLabel>Participate in felatio with {0}</SexOptionBlowjobLabel>
-	<SexOptionCunnilingusLabel>Participate in cunnilingus with {0}</SexOptionCunnilingusLabel>
-	<SexOptionAnalLabel>Have anal sex with {0}</SexOptionAnalLabel>
+	<SexOptionFoolAroundLabel>Fool around with {0}</SexOptionFoolAroundLabel>
 </LanguageData>

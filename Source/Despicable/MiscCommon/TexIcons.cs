@@ -14,11 +14,6 @@ namespace Despicable
         // [-= Face Parts Module]
         public static readonly Texture2D FaceGizmo = ContentFinder<Texture2D>.Get("UI/FaceParts/FaceGizmo");
 
-        // [-= Lovin Module =-]
-        public static readonly Texture2D Vaginal = ContentFinder<Texture2D>.Get("UI/Interaction/vaginal");
-        public static readonly Texture2D Oral = ContentFinder<Texture2D>.Get("UI/Interaction/oral");
-        public static readonly Texture2D Anal = ContentFinder<Texture2D>.Get("UI/Interaction/anal");
-
         // [-= Hero Module =-]
         public static readonly Texture2D HeroGizmo = ContentFinder<Texture2D>.Get("UI/Karma/HeroGizmo");
         public static readonly Texture2D GoodKarma = ContentFinder<Texture2D>.Get("UI/Karma/GoodKarma");

@@ -100,14 +100,7 @@ namespace Despicable
                         {
                             if (ticks % blinkTick == 0 && !PawnStateUtil.IsAsleep(pawn))
                             {
-                                if (LovinUtil.IsLovin(pawn))
-                                {
-                                    if (Rand.Bool)
-                                        PlayFacialAnim(LovinModule_FacialAnimDefOf.FacialAnim_Moan);
-                                    else
-                                        PlayFacialAnim(LovinModule_FacialAnimDefOf.FacialAnim_Gasp);
-                                }
-                                else
+                                if (!LovinUtil.IsLovin(pawn))
                                 {
                                     // Babies drool sometimes
                                     if (PawnStateUtil.isInfant(pawn) && Rand.Bool)

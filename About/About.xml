@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-	<packageId>DCSzar.Despicable</packageId>
-	<name>Despicable</name>
+	<packageId>DCSzar.Despicable.Core</packageId>
+	<name>Despicable - Core</name>
 	<author>DCSzar</author>
 	<description>
-	A lightweight alternative to RJW and NAL's facial animations. Built for maximum compatibility with vanilla-style mods. Less built for gooning, more-so built for immersion and extending characters and their interactions; Without changing gameplay much, if at all. Best used alongside Intimacy, but can work standalone. CREDITS TO C0FFEEE FOR ANIMATION FRAMEWORK!
+		Squeaky clean version of Despicable. Includes hero module, facial animations, manual social interactions; as well as integrations with Echocolony, Intimacy, GenderWorks, and Birds of a Feather.
 	</description>
 	<supportedVersions>
 		<li>1.6</li>

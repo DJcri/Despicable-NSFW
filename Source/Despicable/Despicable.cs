@@ -35,7 +35,7 @@ namespace Despicable
     {
         public static Despicable Instance;
         public static Harmony harmony;
-        public const string ModName = "Despicable";
+        public const string ModName = "Despicable - Core";
         public Settings settings;
 
         // Mod check bools
@@ -48,7 +48,7 @@ namespace Despicable
             if (nlFacialInstalled)
                 settings.facialPartsExtensionEnabled = false;
 
-            harmony = new Harmony("com.DCSzar.Despicable");
+            harmony = new Harmony("com.DCSzar.Despicable.Core");
             harmony.PatchAll();
         }
 
@@ -57,13 +57,9 @@ namespace Despicable
             Listing_Standard listingStandard = new Listing_Standard();
             listingStandard.Begin(inRect);
             listingStandard.CheckboxLabeled("Debug Mode", ref settings.debugMode, "Toggle debug mode, allows mod to log messages in console");
-            listingStandard.CheckboxLabeled("Animation Extension", ref settings.animationExtensionEnabled, "Toggle explicit lovin' animations (c0ffeeee's framework reworked)");
             listingStandard.CheckboxLabeled("Facial Extension", ref settings.facialPartsExtensionEnabled, "Toggle animated Despicable face parts (keep off if NL is installed)");
             listingStandard.CheckboxLabeled("Lovin' Extension", ref settings.lovinExtensionEnabled, "Toggle ability to socialize manually");
             listingStandard.CheckboxLabeled("Hero Module (Karma)", ref settings.heroModuleEnabled, "Toggle hero module");
-            listingStandard.CheckboxLabeled("Nudity Enabled", ref settings.nudityEnabled, "Toggle explicit nudity (genital rendering)");
-            listingStandard.Label("Sound Volume for animations");
-            settings.soundVolume = listingStandard.Slider(settings.soundVolume, 0f, 1f);
             listingStandard.End();
             base.DoSettingsWindowContents(inRect);
         }

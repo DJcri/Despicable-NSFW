@@ -14,15 +14,4 @@
 		<defName>FacialExpression_Gasp</defName>
 		<texPathMouth>FaceParts/Mouths/mouth_gasp</texPathMouth>
 	</Despicable.ExpressionDef>
-	<Despicable.ExpressionDef>
-		<defName>FacialExpression_Moan</defName>
-		<texPathEyes>Gendered/eye_closed</texPathEyes>
-		<texPathMouth>FaceParts/Mouths/mouth_open</texPathMouth>
-	</Despicable.ExpressionDef>
-	<Despicable.ExpressionDef>
-		<defName>FacialExpression_Orgasm</defName>
-		<texPathEyes>FaceParts/Eyes/eye_shut</texPathEyes>
-		<texPathMouth>FaceParts/Mouths/mouth_gasp</texPathMouth>
-		<texPathDetail>FaceParts/Details/detail_cheekblush</texPathDetail>
-	</Despicable.ExpressionDef>
 </Defs>
