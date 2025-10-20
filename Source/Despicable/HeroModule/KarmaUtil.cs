@@ -135,7 +135,8 @@ namespace Despicable
         {
             foreach (var ability in pawn.abilities.AllAbilitiesForReading.ToList())
             {
-                if (ability.def.comps[0].GetType() == typeof(CompProperties_AbilityKarmaic))
+                // SAFELY check if the ability's definition has ANY component of the correct type
+                if (ability?.def?.comps != null && ability.def.comps.Any(comp => comp is CompProperties_AbilityKarmaic))
                 {
                     pawn.abilities.RemoveAbility(ability.def);
                 }
