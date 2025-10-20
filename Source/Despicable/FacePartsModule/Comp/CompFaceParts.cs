@@ -268,7 +268,7 @@ namespace Despicable
             Scribe_Defs.Look(ref mouthStyleDef, "mouthStyleDef");
             Scribe_Deep.Look(ref baseExpression, "baseExpression");
             Scribe_Deep.Look(ref animExpression, "animExpression");
-            Scribe_Deep.Look(ref facialAnim, "facialAnim");
+            Scribe_Defs.Look(ref facialAnim, "facialAnim");
             Scribe_Values.Look(ref animTicks, "animTicks", 0);
         }
 

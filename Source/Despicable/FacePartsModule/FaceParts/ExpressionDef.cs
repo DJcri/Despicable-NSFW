@@ -8,7 +8,7 @@ using Verse;
 
 namespace Despicable
 {
-    public class ExpressionDef : Def
+    public class ExpressionDef : Def, IExposable
     {
         public string texPathEyes;
         public string texPathMouth;
@@ -16,6 +16,16 @@ namespace Despicable
         public Vector3? eyesOffset;
         public Vector3? mouthOffset;
         public Vector3? detailOffset;
+
+        public void ExposeData()
+        {
+            Scribe_Values.Look(ref texPathEyes, "texPathEyes");
+            Scribe_Values.Look(ref texPathMouth, "texPathMouth");
+            Scribe_Values.Look(ref texPathDetail, "texPathDetail");
+            Scribe_Values.Look(ref eyesOffset, "eyesOffset");
+            Scribe_Values.Look(ref mouthOffset, "mouthOffset");
+            Scribe_Values.Look(ref detailOffset, "detailOffset");
+        }
 
         public Vector3? getOffset(string facePartLabel)
         {
